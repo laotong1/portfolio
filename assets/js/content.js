@@ -1,4 +1,4 @@
-﻿/* =========================================================
+/* =========================================================
    作品集 · 内容配置
    ---------------------------------------------------------
    所有文字/链接/视频都在这个文件里改，不用动 HTML。
@@ -135,6 +135,15 @@ window.SITE = {
         "用同一套验收标准做质检，减少试错"
       ]
     }
+  ],
+
+  /* ---------- 其他作品（片单） ----------
+     这几部没有可靠片名，先按题材归类；拿到真名后把 genre 换成《片名》即可。 */
+  more: [
+    { id: "revenge", genre: "都市 · 复仇", meta: "63 集 · 海外发行", video: { mp4: "assets/video/more-revenge.mp4", poster: "assets/img/more-revenge.jpg", tag: "30s" } },
+    { id: "aether",  genre: "西幻 · 战争", meta: "60 集 · 海外发行", video: { mp4: "assets/video/more-aether.mp4",  poster: "assets/img/more-aether.jpg",  tag: "30s" } },
+    { id: "river",   genre: "民国 · 悬疑", meta: "40 集 · 国内发行", video: { mp4: "assets/video/more-river.mp4",   poster: "assets/img/more-river.jpg",   tag: "30s" } },
+    { id: "city",    genre: "都市 · 悬疑", meta: "43 集 · 海外发行", video: { mp4: "assets/video/more-city.mp4",    poster: "assets/img/more-city.jpg",    tag: "30s" } }
   ],
 
   /* ---------- 动作戏专项 ---------- */

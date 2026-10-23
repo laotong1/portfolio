@@ -198,6 +198,29 @@
     }).join("");
   }
 
+  /* ------------------------------ more ------------------------------ */
+  function renderMore() {
+    var host = $("#moreGrid");
+    if (!host || !S.more) return;
+
+    host.innerHTML = S.more.map(function (m) {
+      var v = m.video || {};
+      return '<article class="mcard" data-reveal>' +
+        '<div class="media media--portrait" data-video data-bilibili="" data-mp4="' + esc(v.mp4 || "") + '" data-poster="' + esc(v.poster || "") + '">' +
+          (v.poster
+            ? '<img src="' + esc(v.poster) + '" alt="' + esc(m.genre) + ' 封面" loading="lazy">'
+            : slotMarkup("待插入", "media")) +
+          (v.tag ? '<span class="media-tag">' + esc(v.tag) + "</span>" : "") +
+          '<button class="play" type="button" aria-label="播放 ' + esc(m.genre) + '"><span class="play-ring"></span></button>' +
+        "</div>" +
+        '<div class="mcard-body">' +
+          '<p class="mcard-genre">' + esc(m.genre) + "</p>" +
+          '<p class="mcard-meta">' + esc(m.meta) + "</p>" +
+        "</div>" +
+        "</article>";
+    }).join("");
+  }
+
   /* ------------------------------ action ------------------------------ */
   function renderAction() {
     var intro = $("#actionIntro");
@@ -379,25 +402,40 @@
       video.controls = true;
       video.autoplay = true;
       video.playsInline = true;
-      // 默认静音：办公室里点开不会突然炸音，想听再点按钮
-      video.muted = true;
-      video.volume = 0;
+      video.volume = 0.2; // 默认 20% 音量：能听见，但不炸
       if (media.dataset.poster) video.poster = media.dataset.poster;
       media.appendChild(video);
 
       var sound = document.createElement("button");
       sound.type = "button";
       sound.className = "sound-toggle";
-      sound.innerHTML = '<span aria-hidden="true">🔇</span>开启声音';
+
+      function paintSound() {
+        sound.innerHTML = video.muted
+          ? '<span aria-hidden="true">🔇</span>静音'
+          : '<span aria-hidden="true">🔊</span>' + Math.round(video.volume * 100) + "%";
+        sound.setAttribute("aria-label", video.muted ? "取消静音" : "静音");
+      }
+      paintSound();
+
       sound.addEventListener("click", function (e) {
         e.stopPropagation();
-        video.muted = false;
-        video.volume = 1;
-        var p = video.play();
-        if (p && p.catch) p.catch(function () {});
-        sound.remove();
+        video.muted = !video.muted;
+        if (!video.muted && video.volume === 0) video.volume = 0.2;
+        paintSound();
       });
       media.appendChild(sound);
+
+      // 浏览器拦截"有声自动播放"时退回静音，绝不让页面自己出声失败卡住
+      var attempt = video.play();
+      if (attempt && attempt.catch) {
+        attempt.catch(function () {
+          video.muted = true;
+          paintSound();
+          var retry = video.play();
+          if (retry && retry.catch) retry.catch(function () {});
+        });
+      }
     }
   }
 
@@ -505,6 +543,7 @@
     renderHero();
     splitName();
     renderWorks();
+    renderMore();
     renderAction();
     renderTech();
     renderPipeline();

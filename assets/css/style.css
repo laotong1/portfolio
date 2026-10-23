@@ -415,6 +415,23 @@ table.sop tr:last-child td{border-bottom:0}
 .stat-s{font-size:10.5px;color:var(--dim);margin-top:5px;line-height:1.6}
 .note{margin-top:22px;font-size:12px;color:var(--dim);line-height:1.9;max-width:60em}
 
+/* ---- 其他作品：四宫格片单 ---- */
+.more{margin-top:clamp(40px,6vw,64px);border-top:1px solid var(--line);padding-top:clamp(26px,4vw,38px)}
+.more-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:clamp(18px,2.6vw,26px)}
+.more-head .mono-label{color:var(--red);opacity:.85}
+.more-desc{font-size:11.5px;color:var(--dim);letter-spacing:.02em}
+.more-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(10px,1.5vw,18px)}
+.mcard{min-width:0}
+.mcard .media{aspect-ratio:9/16;background:#000}
+.mcard .media img{transition:transform .7s var(--ease),filter .4s}
+.mcard:hover .media img{transform:scale(1.04)}
+.mcard .play-ring{width:50px;height:50px}
+.mcard .play-ring::after{border-left-width:12px;border-top-width:8px;border-bottom-width:8px}
+.mcard .media-tag{font-size:9px;padding:4px 7px}
+.mcard-body{padding-top:9px}
+.mcard-genre{font-size:13px;color:var(--fg);letter-spacing:.02em}
+.mcard-meta{font-family:var(--mono);font-size:9px;letter-spacing:.08em;color:var(--dim);margin-top:4px}
+
 /* ================= CONTACT ================= */
 .contact{padding-bottom:clamp(80px,10vw,140px)}
 .contact-h{
@@ -500,6 +517,7 @@ table.sop tr:last-child td{border-bottom:0}
   }
   .media--portrait{max-width:320px;margin-left:auto;margin-right:auto}
   .still-row--portrait{max-width:320px;margin-left:auto;margin-right:auto}
+  .more-grid{grid-template-columns:repeat(2,1fr)}
   .tech-extra{grid-template-columns:1fr}
   .timeline{grid-template-columns:repeat(2,1fr)}
   .step:nth-child(2){border-right:0}
