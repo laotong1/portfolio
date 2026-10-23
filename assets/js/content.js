@@ -14,7 +14,7 @@ window.SITE = {
   // 一句话定位（支持 <b> 强调）
   tagline: "能把一部男频打斗短剧<b>从文字变成可交付成片</b>，并且知道每个环节会在哪里崩掉。",
 
-  meta: ["男频打斗", "破亿播放", "全流程导演", "国内 / 海外双版本"],
+  meta: ["男频打斗", "破亿播放", "国内 / 海外双版本"],
 
   keywords: [
     "剧本拆解", "分镜脚本", "动作设计", "镜头语言", "节奏与剪辑",
@@ -146,11 +146,7 @@ window.SITE = {
         { k: "产线", v: "同一套模板与参数规范" }
       ],
       video: { bilibili: "", mp4: "assets/video/more-revenge.mp4", poster: "assets/img/more-revenge.jpg", orientation: "portrait" },
-      stills: [
-        { label: "开场", caption: "车内对峙，先给压迫感", image: "assets/img/more-revenge-1.jpg" },
-        { label: "推进", caption: "后视镜里的追踪视点", image: "assets/img/more-revenge-2.jpg" },
-        { label: "收束", caption: "公路上的二次对峙", image: "assets/img/more-revenge-3.jpg" }
-      ],
+      stills: [],
       bullets: [
         "都市复仇题材，开场十秒进冲突，每集结尾留扣。",
         "63 集连续产出，靠同一套模板与命名规范维持人物和画面一致。"
@@ -168,11 +164,7 @@ window.SITE = {
         { k: "产线", v: "群像与大场面合成" }
       ],
       video: { bilibili: "", mp4: "assets/video/more-aether.mp4", poster: "assets/img/more-aether.jpg", orientation: "portrait" },
-      stills: [
-        { label: "破门", caption: "金色能量爆开城门", image: "assets/img/more-aether-1.jpg" },
-        { label: "王", caption: "Aiden 的眼睛先亮", image: "assets/img/more-aether-2.jpg" },
-        { label: "反派", caption: "法杖登场，紫光作标识", image: "assets/img/more-aether-3.jpg" }
-      ],
+      stills: [],
       bullets: [
         "雪原守城战，群像与攻城节奏，大场面靠合成而不是堆素材。",
         "同一条产线换了题材，角色一致性与首尾帧模板直接复用。"
@@ -190,11 +182,7 @@ window.SITE = {
         { k: "产线", v: "年代质感统一" }
       ],
       video: { bilibili: "", mp4: "assets/video/more-river.mp4", poster: "assets/img/more-river.jpg", orientation: "portrait" },
-      stills: [
-        { label: "街", caption: "人力车与围观人群", image: "assets/img/more-river-1.jpg" },
-        { label: "车", caption: "督导局长到场", image: "assets/img/more-river-2.jpg" },
-        { label: "人", caption: "白西装与礼帽的分量", image: "assets/img/more-river-3.jpg" }
-      ],
+      stills: [],
       bullets: [
         "749 秘档系列，民国背景加超自然事件，气氛先于动作。",
         "同一套管线切到年代戏：服装、街景、色调要一起钉死。"
@@ -212,11 +200,7 @@ window.SITE = {
         { k: "产线", v: "对白驱动，剪辑定节奏" }
       ],
       video: { bilibili: "", mp4: "assets/video/more-city.mp4", poster: "assets/img/more-city.jpg", orientation: "portrait" },
-      stills: [
-        { label: "情绪", caption: "Victoria 的崩溃特写", image: "assets/img/more-city-1.jpg" },
-        { label: "反转", caption: "同一个人，换一副面孔", image: "assets/img/more-city-2.jpg" },
-        { label: "幕后", caption: "AR 与董事会摊牌", image: "assets/img/more-city-3.jpg" }
-      ],
+      stills: [],
       bullets: [
         "都市情感加机器人设定，反转靠信息差，靠对白推进。",
         "同一产线做现代戏，重点从动作转到表演与反应镜头。"

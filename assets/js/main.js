@@ -185,7 +185,6 @@
       return '<article id="work-' + esc(p.id) + '" class="work' + (i % 2 ? " work--flip" : "") +
         (p.video && p.video.orientation === "portrait" ? " work--portrait" : "") + '" data-reveal>' +
         '<div class="work-head">' +
-          (tags ? '<div class="tags">' + tags + "</div>" : "") +
           '<h3 class="work-title">' + esc(p.title) + "</h3>" +
           '<p class="work-sub">' + (p.sub || "") + "</p>" +
           (p.highlight ? '<p class="work-highlight"><i></i>' + esc(p.highlight) + "</p>" : "") +
@@ -226,11 +225,6 @@
           '<p class="step-detail">' + esc(s.detail) + "</p>" +
           "</div>";
       }).join("");
-    }
-
-    var q = $("#actionQuote");
-    if (q && S.action) {
-      q.innerHTML = "“" + esc(S.action.quote) + "”<cite>" + esc(S.action.cite) + "</cite>";
     }
   }
 
@@ -533,17 +527,17 @@
       mail.textContent = S.email;
     }
 
-    var host = $("#contactGrid");
+    var host = $("#contactLinks");
     if (!host) return;
 
-    var items = (S.contact || []).slice();
+    var items = (S.contact || []).filter(function (c) { return c.label !== "邮箱"; });
     host.innerHTML = items.map(function (c) {
-      var body = c.label === "简历"
-        ? '<p><a href="' + esc(S.resume.director) + '" download>执行导演版 PDF</a><br>' +
-          '<a href="' + esc(S.resume.tech) + '" download>AIGC 技术版 PDF</a></p>'
-        : '<a href="' + esc(c.href) + '"' + (/^https?:/.test(c.href) ? ' target="_blank" rel="noopener"' : "") + ">" +
-          esc(c.value) + "</a>";
-      return '<div class="citem"><span class="mono-label">' + esc(c.label) + "</span>" + body + "</div>";
+      if (c.label === "简历") {
+        return '<a href="' + esc(S.resume.director) + '" download>执行导演版 PDF</a>' +
+          '<a href="' + esc(S.resume.tech) + '" download>AIGC 技术版 PDF</a>';
+      }
+      return '<a href="' + esc(c.href) + '"' + (/^https?:/.test(c.href) ? ' target="_blank" rel="noopener"' : "") + ">" +
+        esc(c.value) + "</a>";
     }).join("");
   }
 
