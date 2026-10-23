@@ -452,7 +452,7 @@ ul,ol{margin:0;padding:0;list-style:none}
   color:rgba(236,233,226,.04);pointer-events:none;user-select:none;z-index:0
 }
 .panel.is-flip .ghost{right:auto;left:calc(var(--pad) - 10px)}
-.panel > *:not(.ghost){position:relative;z-index:1}
+.panel > *:not(.ghost):not(.work-bg){position:relative;z-index:1}
 .panel--numbers .stats,.panel--numbers .panel-note,.panel--tech .pipe,.panel--tech .tech-row{z-index:1}
 
 /* 文字面板：标题顶到上边、内容压到下边，整屏被撑满 */
@@ -527,3 +527,91 @@ ul,ol{margin:0;padding:0;list-style:none}
 .tech-row{grid-template-columns:repeat(4,minmax(0,1fr))}
 .tech-card h3{white-space:normal;font-size:clamp(18px,1.45vw,21px)}
 .tech-card{min-width:0}
+
+/* =========================================================
+   作品面板：影片画面铺满整屏（模糊/压暗），视频仍是唯一清晰的画面
+   ========================================================= */
+.panel--work{overflow:hidden;isolation:isolate}
+.work-bg{
+  position:absolute;inset:-8%;z-index:0;
+  background-size:cover;background-position:center 35%;
+  filter:blur(46px) saturate(.85) brightness(.55);
+  transform:scale(1.12);opacity:.9;pointer-events:none
+}
+.panel--work::after{
+  content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(90% 90% at 50% 45%,rgba(8,9,10,.35),rgba(8,9,10,.86) 78%),
+    linear-gradient(90deg,rgba(8,9,10,.75),rgba(8,9,10,.25) 45%,rgba(8,9,10,.75))
+}
+.panel--work .work-grid{position:relative;z-index:2}
+.work-media{
+  height:min(86vh,860px);
+  box-shadow:0 40px 120px rgba(0,0,0,.75),0 0 0 1px rgba(236,233,226,.1)
+}
+.panel--work .ghost{z-index:1;opacity:.5}
+
+/* 背景层调亮：之前压得太黑，等于没加 */
+.work-bg{filter:blur(26px) saturate(1.1) brightness(.85);opacity:1;transform:scale(1.18)}
+.panel--work::after{
+  background:
+    radial-gradient(75% 75% at 46% 42%,rgba(8,9,10,.05),rgba(8,9,10,.72) 82%),
+    linear-gradient(90deg,rgba(8,9,10,.55),rgba(8,9,10,.05) 40%,rgba(8,9,10,.55))
+}
+
+/* 背景层真正显形：只做轻度模糊，暗部只压在文字那一侧 */
+.work-bg{filter:blur(9px) saturate(1.15) brightness(.95);transform:scale(1.22);opacity:1}
+.panel--work::after{
+  background:linear-gradient(90deg,
+    rgba(8,9,10,.12) 0%,rgba(8,9,10,.18) 38%,
+    rgba(8,9,10,.88) 64%,rgba(8,9,10,.96) 100%)
+}
+.panel--work.is-flip::after{
+  background:linear-gradient(270deg,
+    rgba(8,9,10,.12) 0%,rgba(8,9,10,.18) 38%,
+    rgba(8,9,10,.88) 64%,rgba(8,9,10,.96) 100%)
+}
+
+/* 背景层：整体只压到 55%，文字下面单独加一层柔光 */
+.work-bg{filter:blur(11px) saturate(1.2) brightness(1.05)}
+.panel--work::after{
+  background:linear-gradient(90deg,rgba(8,9,10,.08) 0%,rgba(8,9,10,.12) 34%,rgba(8,9,10,.58) 58%,rgba(8,9,10,.8) 100%)
+}
+.panel--work.is-flip::after{
+  background:linear-gradient(270deg,rgba(8,9,10,.08) 0%,rgba(8,9,10,.12) 34%,rgba(8,9,10,.58) 58%,rgba(8,9,10,.8) 100%)
+}
+.work-copy{
+  padding:clamp(18px,2.2vw,30px);
+  margin:clamp(-30px,-2.2vw,-18px);
+  background:radial-gradient(120% 120% at 40% 50%,rgba(8,9,10,.82),rgba(8,9,10,.55) 60%,transparent 100%)
+}
+
+/* 修：上面的 > * 规则把背景层也变成了 relative，高度塌成 0 */
+.panel--work .work-bg{position:absolute;inset:-8%;z-index:0}
+
+/* 去掉文字块自带的那块硬边暗色，改由整屏渐变承担 */
+.work-copy{background:none;padding:0;margin:0}
+.panel--work::after{
+  background:linear-gradient(90deg,
+    rgba(8,9,10,.10) 0%,rgba(8,9,10,.16) 32%,
+    rgba(8,9,10,.66) 56%,rgba(8,9,10,.86) 100%)
+}
+.panel--work.is-flip::after{
+  background:linear-gradient(270deg,
+    rgba(8,9,10,.10) 0%,rgba(8,9,10,.16) 32%,
+    rgba(8,9,10,.66) 56%,rgba(8,9,10,.86) 100%)
+}
+.work-bg{filter:blur(15px) saturate(1.15) brightness(1)}
+
+/* 文字压暗再补一点，保证在亮背景上也能读 */
+.panel--work::after{
+  background:linear-gradient(90deg,
+    rgba(8,9,10,.14) 0%,rgba(8,9,10,.22) 32%,
+    rgba(8,9,10,.74) 58%,rgba(8,9,10,.9) 100%)
+}
+.panel--work.is-flip::after{
+  background:linear-gradient(270deg,
+    rgba(8,9,10,.14) 0%,rgba(8,9,10,.22) 32%,
+    rgba(8,9,10,.74) 58%,rgba(8,9,10,.9) 100%)
+}
+.work-title,.work-fig,.work-line,.work-no{text-shadow:0 2px 18px rgba(0,0,0,.65)}
