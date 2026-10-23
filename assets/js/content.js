@@ -14,7 +14,7 @@ window.SITE = {
   // 一句话定位（支持 <b> 强调）
   tagline: "能把一部男频打斗短剧<b>从文字变成可交付成片</b>，并且知道每个环节会在哪里崩掉。",
 
-  meta: ["男频打斗", "全流程导演", "国内 / 海外双版本", "懂技术的导演"],
+  meta: ["男频打斗", "破亿播放", "全流程导演", "国内 / 海外双版本"],
 
   keywords: [
     "剧本拆解", "分镜脚本", "动作设计", "镜头语言", "节奏与剪辑",
@@ -35,16 +35,15 @@ window.SITE = {
   },
 
   /* ---------- 数据 ----------
-     改数字直接改 n；prefix/suffix 会跟着动。 */
+     数字来自《作品数据.xlsx》的后台累计播放（截至 2026-10）。 */
   stats: [
-    { n: 3,  suffix: " 部", label: "独立导演作品",  sub: "《749 局：灵族入海》《猎魔人》《驯龙高手》" },
-    { n: 20, suffix: "+",  label: "聚合生成模型",   sub: "FlowAIGC 画布内直接调用" },
-    { n: 40, prefix: "−", suffix: "%", label: "制作成本下降", sub: "整合 AI 管线前后对比", bar: 40 },
-    { n: 60, prefix: "+", suffix: "%", label: "综合人效提升", sub: "同上口径", bar: 60 }
+    { n: 6.3, decimals: 1, suffix: " 亿", label: "累计播放", sub: "23 部在架作品合计" },
+    { n: 23,  suffix: " 部", label: "在架作品", sub: "2026.02 – 2026.10" },
+    { n: 909, suffix: " 集", label: "在架总集数", sub: "平均约 40 集 / 部" },
+    { n: 2,   suffix: " 部", label: "播放破亿", sub: "含《749局猎神》1.0 亿" }
   ],
 
-  // TODO（投递前补）：___ 部短剧、共 ___ 集、单集 ___ 分钟；单集周期从 ___ 天压到 ___ 天；团队 ___ 人。
-  statsNote: "成本与人效为棠橙文化项目整合 AI 管线前后的对比口径；作品数为本人独立导演且已上线的部分，同系列及同类作品另有多部。",
+  statsNote: "数据来自作品后台累计播放（截至 2026-10）：23 部在架作品合计 6.33 亿，其中 2 部破亿、7 部过千万；另有 AI 管线使制作成本下降约 40%、综合人效提升 60% 以上（棠橙文化口径）。",
 
   /* ---------- 代表作 ----------
      video.bilibili 填 BV 号即可（如 "BV1xx411c7mD"），国内 HR 点开就能播。
@@ -54,11 +53,12 @@ window.SITE = {
     {
       id: "749",
       tags: ["国内发行", "男频打斗", "全流程"],
-      title: "《749 局：灵族入海》",
+      title: "《749局猎神》",
       sub: "导演 / 全流程制作",
+      highlight: "累计播放 1.0 亿+ · 破亿短剧",
       meta: [
         { k: "角色", v: "导演 · 剧本改编 · 分镜 · 生成 · 剪辑" },
-        { k: "发行", v: "国内平台" },
+        { k: "体量", v: "40 集 · 播放 100,592,178" },
         { k: "产线", v: "自研 FlowAIGC 画布" }
       ],
       video: { bilibili: "", mp4: "assets/video/749.mp4", poster: "assets/img/749-poster.jpg", tag: "30s 成片", orientation: "portrait" },
@@ -68,9 +68,9 @@ window.SITE = {
         { label: "收束", caption: "白衣人背影，留扣", image: "assets/img/749-3.jpg" }
       ],
       bullets: [
+        "单部 40 集，后台累计播放 1.0 亿+，是这个账号跑得最好的一部。",
         "从剧本改编、人物形象与资产设定，到分镜与成片生成，全流程一个人扛完。",
-        "全部镜头在自研 FlowAIGC 画布上生产，边做片边迭代工具。",
-        "统一角色、服装、场景与表演基调，解决跨镜头的人物不一致与情绪断点。"
+        "全部镜头在自研 FlowAIGC 画布上生产，边做片边迭代工具。"
       ],
       breakdown: [
         "剧本 → 可执行镜头清单，逐场定景别、机位与节奏点",
@@ -134,16 +134,95 @@ window.SITE = {
         "只重做题材相关的资产与提示词库",
         "用同一套验收标准做质检，减少试错"
       ]
+    },
+    {
+      id: "revenge",
+      tags: ["同类作品", "都市复仇", "63 集"],
+      title: "《以牙还牙》",
+      sub: "同类作品 · 同一条 AI 产线",
+      meta: [
+        { k: "体量", v: "63 集" },
+        { k: "题材", v: "都市复仇" },
+        { k: "产线", v: "同一套模板与参数规范" }
+      ],
+      video: { bilibili: "", mp4: "assets/video/more-revenge.mp4", poster: "assets/img/more-revenge.jpg", tag: "30s 成片", orientation: "portrait" },
+      stills: [
+        { label: "开场", caption: "车内对峙，先给压迫感", image: "assets/img/more-revenge-1.jpg" },
+        { label: "推进", caption: "后视镜里的追踪视点", image: "assets/img/more-revenge-2.jpg" },
+        { label: "收束", caption: "公路上的二次对峙", image: "assets/img/more-revenge-3.jpg" }
+      ],
+      bullets: [
+        "都市复仇题材，开场十秒进冲突，每集结尾留扣。",
+        "63 集连续产出，靠同一套模板与命名规范维持人物和画面一致。"
+      ],
+      breakdown: []
+    },
+    {
+      id: "aether",
+      tags: ["同类作品", "西幻战争", "60 集"],
+      title: "西幻 · 战争",
+      sub: "同类作品 · 同一条 AI 产线",
+      meta: [
+        { k: "体量", v: "60 集" },
+        { k: "题材", v: "西幻守城" },
+        { k: "产线", v: "群像与大场面合成" }
+      ],
+      video: { bilibili: "", mp4: "assets/video/more-aether.mp4", poster: "assets/img/more-aether.jpg", tag: "30s 成片", orientation: "portrait" },
+      stills: [
+        { label: "破门", caption: "金色能量爆开城门", image: "assets/img/more-aether-1.jpg" },
+        { label: "王", caption: "Aiden 的眼睛先亮", image: "assets/img/more-aether-2.jpg" },
+        { label: "反派", caption: "法杖登场，紫光作标识", image: "assets/img/more-aether-3.jpg" }
+      ],
+      bullets: [
+        "雪原守城战，群像与攻城节奏，大场面靠合成而不是堆素材。",
+        "同一条产线换了题材，角色一致性与首尾帧模板直接复用。"
+      ],
+      breakdown: []
+    },
+    {
+      id: "river",
+      tags: ["同类作品", "民国悬疑", "40 集"],
+      title: "民国 · 悬疑",
+      sub: "同类作品 · 同一条 AI 产线",
+      meta: [
+        { k: "体量", v: "40 集" },
+        { k: "题材", v: "民国江兽" },
+        { k: "产线", v: "年代质感统一" }
+      ],
+      video: { bilibili: "", mp4: "assets/video/more-river.mp4", poster: "assets/img/more-river.jpg", tag: "30s 成片", orientation: "portrait" },
+      stills: [
+        { label: "街", caption: "人力车与围观人群", image: "assets/img/more-river-1.jpg" },
+        { label: "车", caption: "督导局长到场", image: "assets/img/more-river-2.jpg" },
+        { label: "人", caption: "白西装与礼帽的分量", image: "assets/img/more-river-3.jpg" }
+      ],
+      bullets: [
+        "民国十七年的江兽事件，气氛与悬念优先于动作。",
+        "同一套管线切到年代戏：服装、街景、色调要一起钉死。"
+      ],
+      breakdown: []
+    },
+    {
+      id: "city",
+      tags: ["同类作品", "都市悬疑", "43 集"],
+      title: "都市 · 悬疑",
+      sub: "同类作品 · 同一条 AI 产线",
+      meta: [
+        { k: "体量", v: "43 集" },
+        { k: "题材", v: "都市情感 + 反转" },
+        { k: "产线", v: "对白驱动，剪辑定节奏" }
+      ],
+      video: { bilibili: "", mp4: "assets/video/more-city.mp4", poster: "assets/img/more-city.jpg", tag: "30s 成片", orientation: "portrait" },
+      stills: [
+        { label: "情绪", caption: "Victoria 的崩溃特写", image: "assets/img/more-city-1.jpg" },
+        { label: "反转", caption: "同一个人，换一副面孔", image: "assets/img/more-city-2.jpg" },
+        { label: "幕后", caption: "AR 与董事会摊牌", image: "assets/img/more-city-3.jpg" }
+      ],
+      bullets: [
+        "都市情感加悬疑反转，靠对白推进，节奏由剪辑定。",
+        "同一产线做现代戏，重点从动作转到表演与反应镜头。"
+      ],
+      breakdown: []
     }
-  ],
-
-  /* ---------- 其他作品（片单） ----------
-     这几部没有可靠片名，先按题材归类；拿到真名后把 genre 换成《片名》即可。 */
-  more: [
-    { id: "revenge", genre: "都市 · 复仇", meta: "63 集 · 海外发行", video: { mp4: "assets/video/more-revenge.mp4", poster: "assets/img/more-revenge.jpg", tag: "30s" } },
-    { id: "aether",  genre: "西幻 · 战争", meta: "60 集 · 海外发行", video: { mp4: "assets/video/more-aether.mp4",  poster: "assets/img/more-aether.jpg",  tag: "30s" } },
-    { id: "river",   genre: "民国 · 悬疑", meta: "40 集 · 国内发行", video: { mp4: "assets/video/more-river.mp4",   poster: "assets/img/more-river.jpg",   tag: "30s" } },
-    { id: "city",    genre: "都市 · 悬疑", meta: "43 集 · 海外发行", video: { mp4: "assets/video/more-city.mp4",    poster: "assets/img/more-city.jpg",    tag: "30s" } }
   ],
 
   /* ---------- 动作戏专项 ---------- */

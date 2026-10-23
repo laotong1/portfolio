@@ -1,4 +1,4 @@
-/* =========================================================
+﻿/* =========================================================
    作品集 · 渲染与交互
    纯原生 JS，无依赖，无外部请求。
    ========================================================= */
@@ -186,6 +186,7 @@
           (tags ? '<div class="tags">' + tags + "</div>" : "") +
           '<h3 class="work-title">' + esc(p.title) + "</h3>" +
           '<p class="work-sub">' + (p.sub || "") + "</p>" +
+          (p.highlight ? '<p class="work-highlight"><i></i>' + esc(p.highlight) + "</p>" : "") +
         "</div>" +
         '<div class="work-media">' + videoMarkup(p, i) + stillsMarkup(p) + "</div>" +
         '<div class="work-body">' +
@@ -199,28 +200,6 @@
   }
 
   /* ------------------------------ more ------------------------------ */
-  function renderMore() {
-    var host = $("#moreGrid");
-    if (!host || !S.more) return;
-
-    host.innerHTML = S.more.map(function (m) {
-      var v = m.video || {};
-      return '<article class="mcard" data-reveal>' +
-        '<div class="media media--portrait" data-video data-bilibili="" data-mp4="' + esc(v.mp4 || "") + '" data-poster="' + esc(v.poster || "") + '">' +
-          (v.poster
-            ? '<img src="' + esc(v.poster) + '" alt="' + esc(m.genre) + ' 封面" loading="lazy">'
-            : slotMarkup("待插入", "media")) +
-          (v.tag ? '<span class="media-tag">' + esc(v.tag) + "</span>" : "") +
-          '<button class="play" type="button" aria-label="播放 ' + esc(m.genre) + '"><span class="play-ring"></span></button>' +
-        "</div>" +
-        '<div class="mcard-body">' +
-          '<p class="mcard-genre">' + esc(m.genre) + "</p>" +
-          '<p class="mcard-meta">' + esc(m.meta) + "</p>" +
-        "</div>" +
-        "</article>";
-    }).join("");
-  }
-
   /* ------------------------------ action ------------------------------ */
   function renderAction() {
     var intro = $("#actionIntro");
@@ -304,7 +283,7 @@
       return '<div class="stat" data-reveal>' +
         '<p class="stat-v">' +
           (s.prefix ? '<span class="stat-a">' + esc(s.prefix) + "</span>" : "") +
-          '<span class="stat-n" data-target="' + s.n + '" data-index="' + i + '">0</span>' +
+          '<span class="stat-n" data-target="' + s.n + '" data-decimals="' + (s.decimals || 0) + '" data-index="' + i + '">0</span>' +
           (s.suffix ? '<span class="stat-a">' + esc(s.suffix) + "</span>" : "") +
         "</p>" +
         '<p class="stat-l">' + esc(s.label) + "</p>" +
@@ -347,9 +326,14 @@
 
   function animateNumber(node) {
     var target = parseFloat(node.dataset.target) || 0;
+    var dec = parseInt(node.dataset.decimals || "0", 10);
     var token = String(Date.now()) + Math.random();
     var start = null;
     var dur = 1300;
+
+    function fmt(v) {
+      return dec ? v.toFixed(dec) : Math.round(v).toLocaleString("en-US");
+    }
 
     node.dataset.token = token;
     node.dataset.busy = "1";
@@ -359,9 +343,9 @@
       if (!start) start = ts;
       var p = Math.min((ts - start) / dur, 1);
       var eased = 1 - Math.pow(1 - p, 3);
-      node.textContent = Math.round(target * eased).toLocaleString("en-US");
+      node.textContent = fmt(target * eased);
       if (p < 1) requestAnimationFrame(frame);
-      else node.textContent = target.toLocaleString("en-US");
+      else node.textContent = fmt(target);
     }
     requestAnimationFrame(frame);
   }
@@ -543,7 +527,6 @@
     renderHero();
     splitName();
     renderWorks();
-    renderMore();
     renderAction();
     renderTech();
     renderPipeline();

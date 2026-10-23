@@ -1,7 +1,5 @@
-/* =========================================================
-   佟子易 · 作品集
-   纯静态站点，无外部请求（字体/图片/脚本全部本地）
-   ========================================================= */
+﻿/* =========================================================
+   浣熷瓙鏄?路 浣滃搧闆?   绾潤鎬佺珯鐐癸紝鏃犲閮ㄨ姹傦紙瀛椾綋/鍥剧墖/鑴氭湰鍏ㄩ儴鏈湴锛?   ========================================================= */
 
 :root{
   --bg:#08090a;
@@ -45,7 +43,7 @@ main [id]{scroll-margin-top:calc(var(--navh) + 18px)}
   text-transform:uppercase;color:var(--dim);
 }
 
-/* 胶片颗粒 */
+/* 鑳剁墖棰楃矑 */
 .grain{
   position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.045;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
@@ -213,7 +211,7 @@ main [id]{scroll-margin-top:calc(var(--navh) + 18px)}
 .work-media{grid-area:media;min-width:0}
 .work-body{grid-area:body;min-width:0}
 
-/* 竖屏短剧：视频占一列手机屏宽，文字在另一列 */
+/* 绔栧睆鐭墽锛氳棰戝崰涓€鍒楁墜鏈哄睆瀹斤紝鏂囧瓧鍦ㄥ彟涓€鍒?*/
 .work--portrait{grid-template-columns:minmax(0,360px) minmax(0,1fr);column-gap:clamp(22px,3.4vw,46px)}
 .work--portrait.work--flip{grid-template-columns:minmax(0,1fr) minmax(0,360px)}
 .work--portrait .work-body{max-width:600px}
@@ -255,7 +253,7 @@ main [id]{scroll-margin-top:calc(var(--navh) + 18px)}
   font-family:var(--mono);font-size:10px;letter-spacing:.2em;color:var(--dim);
   text-transform:uppercase;line-height:1.7
 }
-/* 视频位：文字放左下角，中间留给播放键 */
+/* 瑙嗛浣嶏細鏂囧瓧鏀惧乏涓嬭锛屼腑闂寸暀缁欐挱鏀鹃敭 */
 .slot--media{place-items:end start;padding:14px 16px}
 .slot--media span{text-align:left}
 .media-tag{
@@ -318,6 +316,15 @@ main [id]{scroll-margin-top:calc(var(--navh) + 18px)}
 .work-title{font-size:clamp(24px,2.8vw,34px);line-height:1.3;font-weight:800;letter-spacing:.01em}
 .work-sub{font-size:12.5px;color:var(--dim);margin-top:8px;letter-spacing:.06em}
 .work-sub em{font-style:normal;color:var(--red)}
+.work-highlight{
+  display:inline-flex;align-items:center;gap:8px;margin-top:12px;
+  font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--red)
+}
+.work-highlight i{
+  width:6px;height:6px;background:var(--red);display:inline-block;
+  box-shadow:0 0 10px rgba(216,52,42,.8);animation:pulse 2.4s var(--ease) infinite
+}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
 .meta-list{display:flex;flex-wrap:wrap;gap:6px 22px;margin:18px 0 0;padding:14px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
 .meta-list div{font-size:11.5px;color:var(--dim);letter-spacing:.04em}
 .meta-list dt{display:inline;font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;color:var(--dim);margin-right:7px}
@@ -415,23 +422,6 @@ table.sop tr:last-child td{border-bottom:0}
 .stat-s{font-size:10.5px;color:var(--dim);margin-top:5px;line-height:1.6}
 .note{margin-top:22px;font-size:12px;color:var(--dim);line-height:1.9;max-width:60em}
 
-/* ---- 其他作品：四宫格片单 ---- */
-.more{margin-top:clamp(40px,6vw,64px);border-top:1px solid var(--line);padding-top:clamp(26px,4vw,38px)}
-.more-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:clamp(18px,2.6vw,26px)}
-.more-head .mono-label{color:var(--red);opacity:.85}
-.more-desc{font-size:11.5px;color:var(--dim);letter-spacing:.02em}
-.more-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(10px,1.5vw,18px)}
-.mcard{min-width:0}
-.mcard .media{aspect-ratio:9/16;background:#000}
-.mcard .media img{transition:transform .7s var(--ease),filter .4s}
-.mcard:hover .media img{transform:scale(1.04)}
-.mcard .play-ring{width:50px;height:50px}
-.mcard .play-ring::after{border-left-width:12px;border-top-width:8px;border-bottom-width:8px}
-.mcard .media-tag{font-size:9px;padding:4px 7px}
-.mcard-body{padding-top:9px}
-.mcard-genre{font-size:13px;color:var(--fg);letter-spacing:.02em}
-.mcard-meta{font-family:var(--mono);font-size:9px;letter-spacing:.08em;color:var(--dim);margin-top:4px}
-
 /* ================= CONTACT ================= */
 .contact{padding-bottom:clamp(80px,10vw,140px)}
 .contact-h{
@@ -488,9 +478,8 @@ table.sop tr:last-child td{border-bottom:0}
 .noscript a{color:var(--red);text-decoration:underline}
 
 /* ================= REVEAL ================= */
-/* 入场态不放 transition：方向切换（data-dir）必须瞬时完成，
-   否则会被过渡"吃掉"，从上方进来也会变成从下方上浮。
-   过渡只写在 .is-in 上，进入时才启动。 */
+/* 鍏ュ満鎬佷笉鏀?transition锛氭柟鍚戝垏鎹紙data-dir锛夊繀椤荤灛鏃跺畬鎴愶紝
+   鍚﹀垯浼氳杩囨浮"鍚冩帀"锛屼粠涓婃柟杩涙潵涔熶細鍙樻垚浠庝笅鏂逛笂娴€?   杩囨浮鍙啓鍦?.is-in 涓婏紝杩涘叆鏃舵墠鍚姩銆?*/
 .js [data-reveal]{opacity:0;transform:translateY(26px)}
 .js [data-reveal][data-dir="down"]{transform:translateY(-26px)}
 .js [data-reveal].is-in{
@@ -517,7 +506,6 @@ table.sop tr:last-child td{border-bottom:0}
   }
   .media--portrait{max-width:320px;margin-left:auto;margin-right:auto}
   .still-row--portrait{max-width:320px;margin-left:auto;margin-right:auto}
-  .more-grid{grid-template-columns:repeat(2,1fr)}
   .tech-extra{grid-template-columns:1fr}
   .timeline{grid-template-columns:repeat(2,1fr)}
   .step:nth-child(2){border-right:0}
@@ -544,7 +532,7 @@ table.sop tr:last-child td{border-bottom:0}
   .footer{flex-direction:column;gap:6px}
   .lightbox img{max-height:70vh}
 
-  /* 表格在窄屏下改为卡片式，避免三列挤成一团 */
+  /* 琛ㄦ牸鍦ㄧ獎灞忎笅鏀逛负鍗＄墖寮忥紝閬垮厤涓夊垪鎸ゆ垚涓€鍥?*/
   table.sop thead{display:none}
   table.sop tr{display:block;padding:15px 0;border-bottom:1px solid var(--line)}
   table.sop tr:last-child{border-bottom:0}
@@ -557,12 +545,10 @@ table.sop tr:last-child td{border-bottom:0}
 }
 
 /* =========================================================
-   MOTION（由 motion.js 驱动）
-   全部限定在 .motion 下：脚本关闭 / 系统开启"减少动态"时，
-   页面回到静态，不会留下半透明或空槽。
-   ========================================================= */
+   MOTION锛堢敱 motion.js 椹卞姩锛?   鍏ㄩ儴闄愬畾鍦?.motion 涓嬶細鑴氭湰鍏抽棴 / 绯荤粺寮€鍚?鍑忓皯鍔ㄦ€?鏃讹紝
+   椤甸潰鍥炲埌闈欐€侊紝涓嶄細鐣欎笅鍗婇€忔槑鎴栫┖妲姐€?   ========================================================= */
 
-/* 顶部滚动进度 */
+/* 椤堕儴婊氬姩杩涘害 */
 .scrollbar{
   position:fixed;top:0;left:0;width:100%;height:2px;z-index:80;
   background:linear-gradient(90deg,var(--red),#ff7a5c);
@@ -570,14 +556,14 @@ table.sop tr:last-child td{border-bottom:0}
   box-shadow:0 0 12px rgba(216,52,42,.55);pointer-events:none
 }
 
-/* 滚动条跟随深色主题 */
+/* 婊氬姩鏉¤窡闅忔繁鑹蹭富棰?*/
 html{scrollbar-color:#24282e #0a0b0d;scrollbar-width:thin}
 ::-webkit-scrollbar{width:11px;height:11px}
 ::-webkit-scrollbar-track{background:#0a0b0d}
 ::-webkit-scrollbar-thumb{background:#24282e;border:3px solid #0a0b0d;border-radius:8px}
 ::-webkit-scrollbar-thumb:hover{background:var(--red)}
 
-/* 逐字入场（首屏姓名） */
+/* 閫愬瓧鍏ュ満锛堥灞忓鍚嶏級 */
 .motion [data-reveal="chars"]{opacity:1;transform:none}
 .motion .hero-name .ch{
   display:inline-block;opacity:0;transform:translateY(112%) rotate(3deg);
@@ -585,14 +571,14 @@ html{scrollbar-color:#24282e #0a0b0d;scrollbar-width:thin}
 }
 .motion .hero-name.is-in .ch{opacity:1;transform:none}
 
-/* 裁切入场（联系页大标题） */
+/* 瑁佸垏鍏ュ満锛堣仈绯婚〉澶ф爣棰橈級 */
 .motion [data-reveal="clip"]{
   opacity:1;transform:none;clip-path:inset(0 100% 0 0);
   transition:clip-path 1.2s var(--ease) .08s
 }
 .motion [data-reveal="clip"].is-in{clip-path:inset(0 0 0 0)}
 
-/* 区块标题：红线拉伸 */
+/* 鍖哄潡鏍囬锛氱孩绾挎媺浼?*/
 .motion .sec-title h2{display:inline-block;position:relative;padding-bottom:9px}
 .motion .sec-title h2::after{
   content:"";position:absolute;left:0;right:0;bottom:0;height:2px;
@@ -602,16 +588,15 @@ html{scrollbar-color:#24282e #0a0b0d;scrollbar-width:thin}
 }
 .motion .sec-head.is-in .sec-title h2::after{transform:scaleX(1)}
 
-/* 首屏照片视差（在 .hero-portrait img 上另起 transform） */
+/* 棣栧睆鐓х墖瑙嗗樊锛堝湪 .hero-portrait img 涓婂彟璧?transform锛?*/
 .motion .hero-portrait img{
   transform:translate3d(0,var(--py,0px),0) scale(1.06);
   transition:filter .6s var(--ease);will-change:transform
 }
 .motion .hero-portrait:hover img{transform:translate3d(0,var(--py,0px),0) scale(1.09)}
 
-/* 作品：画面擦除 + 缩略图依次落位 + 标题划线
-   全部用 transition，不用 animation —— 只有这样撤销 is-in 时才会倒放，
-   来回滚动都能重播。 */
+/* 浣滃搧锛氱敾闈㈡摝闄?+ 缂╃暐鍥句緷娆¤惤浣?+ 鏍囬鍒掔嚎
+   鍏ㄩ儴鐢?transition锛屼笉鐢?animation 鈥斺€?鍙湁杩欐牱鎾ら攢 is-in 鏃舵墠浼氬€掓斁锛?   鏉ュ洖婊氬姩閮借兘閲嶆挱銆?*/
 .motion .work .media{
   clip-path:inset(0 100% 0 0)
 }
@@ -626,7 +611,7 @@ html{scrollbar-color:#24282e #0a0b0d;scrollbar-width:thin}
   transition:opacity .6s var(--ease),transform .6s var(--ease)
 }
 .motion .work.is-in .still{opacity:1;transform:none}
-/* 延迟只写在进入态：出场时不排队，直接一起退 */
+/* 寤惰繜鍙啓鍦ㄨ繘鍏ユ€侊細鍑哄満鏃朵笉鎺掗槦锛岀洿鎺ヤ竴璧烽€€ */
 .motion .work.is-in .still:nth-child(1){transition-delay:.14s}
 .motion .work.is-in .still:nth-child(2){transition-delay:.22s}
 .motion .work.is-in .still:nth-child(3){transition-delay:.3s}
@@ -640,7 +625,7 @@ html{scrollbar-color:#24282e #0a0b0d;scrollbar-width:thin}
 }
 .motion .work.is-in .work-title::after{transform:scaleX(1)}
 
-/* 动作戏：四拍随滚动点亮 */
+/* 鍔ㄤ綔鎴忥細鍥涙媿闅忔粴鍔ㄧ偣浜?*/
 .motion .timeline{position:relative;--tp:0}
 .motion .timeline::after{
   content:"";position:absolute;left:0;top:-1px;height:2px;
@@ -655,7 +640,7 @@ html{scrollbar-color:#24282e #0a0b0d;scrollbar-width:thin}
 .motion .step .step-en{opacity:.5;transition:opacity .45s var(--ease),color .45s}
 .motion .step.is-on .step-en{opacity:1;color:var(--red)}
 
-/* 技术页：产线 */
+/* 鎶€鏈〉锛氫骇绾?*/
 .pipe{
   position:relative;border:1px solid var(--line);
   background:linear-gradient(180deg,rgba(255,255,255,.018),transparent 42%),var(--bg2);
@@ -711,7 +696,7 @@ html{scrollbar-color:#24282e #0a0b0d;scrollbar-width:thin}
 .motion .pipe-node.is-on b{color:var(--fg)}
 .motion .pipe-node.is-on em{color:var(--muted)}
 
-/* 技术卡片：悬停扫光 */
+/* 鎶€鏈崱鐗囷細鎮仠鎵厜 */
 .tcard{position:relative;overflow:hidden}
 .tcard::after{
   content:"";position:absolute;left:0;right:0;top:0;height:45%;
@@ -722,7 +707,7 @@ html{scrollbar-color:#24282e #0a0b0d;scrollbar-width:thin}
 .tcard:hover::after{opacity:1;animation:sweep 1.1s var(--ease) forwards}
 @keyframes sweep{from{transform:translateY(-120%)}to{transform:translateY(330%)}}
 
-/* SOP 表格：逐行落下（同样用 transition，出场即复位） */
+/* SOP 琛ㄦ牸锛氶€愯钀戒笅锛堝悓鏍风敤 transition锛屽嚭鍦哄嵆澶嶄綅锛?*/
 .motion .table-wrap tbody tr{opacity:0;transition:opacity .45s var(--ease)}
 .motion .table-wrap.is-in tbody tr{opacity:1}
 .motion .table-wrap.is-in tbody tr:nth-child(1){transition-delay:.06s}
@@ -732,7 +717,7 @@ html{scrollbar-color:#24282e #0a0b0d;scrollbar-width:thin}
 .motion .table-wrap.is-in tbody tr:nth-child(5){transition-delay:.26s}
 .motion .table-wrap.is-in tbody tr:nth-child(6){transition-delay:.31s}
 
-/* 数据：进度条 */
+/* 鏁版嵁锛氳繘搴︽潯 */
 .stat-bar{display:block;position:relative;height:2px;background:var(--line);margin-top:14px;overflow:hidden}
 .stat-bar i{
   position:absolute;left:0;top:0;bottom:0;width:var(--v,0%);
@@ -742,7 +727,7 @@ html{scrollbar-color:#24282e #0a0b0d;scrollbar-width:thin}
 .motion .stat-bar i{width:0}
 .motion .stat.is-in .stat-bar i{width:var(--v,0%)}
 
-/* 产线窄屏：竖向 */
+/* 浜х嚎绐勫睆锛氱珫鍚?*/
 @media (max-width:760px){
   .pipe-nodes{grid-template-columns:1fr;gap:16px}
   .pipe-node{display:grid;grid-template-columns:16px 1fr;gap:0 12px;text-align:left;padding:0}
@@ -754,7 +739,7 @@ html{scrollbar-color:#24282e #0a0b0d;scrollbar-width:thin}
   .pipe-head{left:50%;top:calc(var(--p,0) * 100%)}
 }
 
-/* 窄屏：四拍是竖排，横向进度线没有意义 */
+/* 绐勫睆锛氬洓鎷嶆槸绔栨帓锛屾í鍚戣繘搴︾嚎娌℃湁鎰忎箟 */
 @media (max-width:640px){
   .motion .timeline::after{display:none}
 }
