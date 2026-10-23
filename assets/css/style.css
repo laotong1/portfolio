@@ -226,6 +226,17 @@ main [id]{scroll-margin-top:calc(var(--navh) + 18px)}
 .media--portrait{aspect-ratio:9/16;background:#000}
 .media iframe,.media video{position:absolute;inset:0;width:100%;height:100%;border:0;object-fit:cover}
 .media img{width:100%;height:100%;object-fit:cover}
+.sound-toggle{
+  position:absolute;right:10px;top:10px;z-index:6;
+  display:inline-flex;align-items:center;gap:6px;
+  font-family:var(--mono);font-size:10px;letter-spacing:.1em;
+  background:rgba(8,9,10,.74);border:1px solid rgba(255,255,255,.34);
+  color:#fff;padding:7px 10px;border-radius:2px;cursor:pointer;
+  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+  transition:background .25s,border-color .25s
+}
+.sound-toggle:hover{background:var(--red);border-color:var(--red)}
+.sound-toggle span{margin-right:4px}
 .slot{
   position:absolute;inset:0;display:grid;place-items:center;text-align:center;
   background:

@@ -379,8 +379,25 @@
       video.controls = true;
       video.autoplay = true;
       video.playsInline = true;
+      // 默认静音：办公室里点开不会突然炸音，想听再点按钮
+      video.muted = true;
+      video.volume = 0;
       if (media.dataset.poster) video.poster = media.dataset.poster;
       media.appendChild(video);
+
+      var sound = document.createElement("button");
+      sound.type = "button";
+      sound.className = "sound-toggle";
+      sound.innerHTML = '<span aria-hidden="true">🔇</span>开启声音';
+      sound.addEventListener("click", function (e) {
+        e.stopPropagation();
+        video.muted = false;
+        video.volume = 1;
+        var p = video.play();
+        if (p && p.catch) p.catch(function () {});
+        sound.remove();
+      });
+      media.appendChild(sound);
     }
   }
 
