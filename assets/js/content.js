@@ -1,4 +1,4 @@
-/* =========================================================
+﻿/* =========================================================
    作品集 · 内容配置
    ---------------------------------------------------------
    所有文字/链接/视频都在这个文件里改，不用动 HTML。
@@ -61,11 +61,11 @@ window.SITE = {
         { k: "发行", v: "国内平台" },
         { k: "产线", v: "自研 FlowAIGC 画布" }
       ],
-      video: { bilibili: "", mp4: "", poster: "", tag: "30s 成片" },
+      video: { bilibili: "", mp4: "assets/video/749.mp4", poster: "assets/img/749-poster.jpg", tag: "30s 成片", orientation: "portrait" },
       stills: [
-        { label: "分镜", caption: "逐场标景别、机位与节奏点", image: "" },
-        { label: "关键帧", caption: "参考图锁人物与场景一致性", image: "" },
-        { label: "成片", caption: "首尾帧补过渡后的镜头", image: "" }
+        { label: "开场", caption: "母子在村口，先给关系", image: "assets/img/749-1.jpg" },
+        { label: "对峙", caption: "男人的反应镜头", image: "assets/img/749-2.jpg" },
+        { label: "收束", caption: "白衣人背影，留扣", image: "assets/img/749-3.jpg" }
       ],
       bullets: [
         "从剧本改编、人物形象与资产设定，到分镜与成片生成，全流程一个人扛完。",
@@ -90,11 +90,11 @@ window.SITE = {
         { k: "发行", v: "海外平台" },
         { k: "版本", v: "国内版 / 海外版并行" }
       ],
-      video: { bilibili: "", mp4: "", poster: "", tag: "30s 成片" },
+      video: { bilibili: "", mp4: "assets/video/witcher.mp4", poster: "assets/img/witcher-poster.jpg", tag: "30s 成片", orientation: "portrait" },
       stills: [
-        { label: "国内版", caption: "爽点密度与钩子位置", image: "" },
-        { label: "海外版", caption: "时长、节奏、字幕重做", image: "" },
-        { label: "数据", caption: "投放反馈（待补截图）", image: "" }
+        { label: "爆点", caption: "火场，声音先到", image: "assets/img/witcher-1.jpg" },
+        { label: "转场", caption: "绿色传送门，空间切换", image: "assets/img/witcher-2.jpg" },
+        { label: "冲击", caption: "法术对撞，能量方向", image: "assets/img/witcher-3.jpg" }
       ],
       bullets: [
         "面向海外市场的男频题材，在海外平台跑出较好的流量表现。",
@@ -118,11 +118,11 @@ window.SITE = {
         { k: "发行", v: "海外平台" },
         { k: "意义", v: "验证产线可跨题材复用" }
       ],
-      video: { bilibili: "", mp4: "", poster: "", tag: "30s 成片" },
+      video: { bilibili: "", mp4: "assets/video/dragon.mp4", poster: "assets/img/dragon-poster.jpg", tag: "30s 成片", orientation: "portrait" },
       stills: [
-        { label: "设定", caption: "角色与场景设定（待插入）", image: "" },
-        { label: "分镜", caption: "起势—交锋—爆点—收势", image: "" },
-        { label: "成片", caption: "成片帧（待插入）", image: "" }
+        { label: "出征", caption: "骑手与长枪，力量朝右", image: "assets/img/dragon-1.jpg" },
+        { label: "对峙", caption: "龙与人的体量差", image: "assets/img/dragon-2.jpg" },
+        { label: "反派", caption: "Morkor 登场，紫光标识", image: "assets/img/dragon-3.jpg" }
       ],
       bullets: [
         "同一条 AI 产线支撑的出海作品，题材换了、模板没换。",

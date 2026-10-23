@@ -119,13 +119,14 @@
     var v = p.video || {};
     var hasBili = !!v.bilibili;
     var hasMp4 = !!v.mp4;
+    var portrait = v.orientation === "portrait";
     var poster = v.poster
       ? '<img src="' + esc(v.poster) + '" alt="' + esc(p.title) + ' 封面" loading="lazy">'
       : slotMarkup(hasBili || hasMp4 ? "视频封面待插入" : "在此嵌入 30 秒成片", "media");
 
     var hint = "";
 
-    return '<div class="media" data-video data-bilibili="' + esc(v.bilibili || "") + '" data-mp4="' + esc(v.mp4 || "") + '" data-poster="' + esc(v.poster || "") + '">' +
+    return '<div class="media' + (portrait ? " media--portrait" : "") + '" data-video data-bilibili="' + esc(v.bilibili || "") + '" data-mp4="' + esc(v.mp4 || "") + '" data-poster="' + esc(v.poster || "") + '">' +
       poster +
       (v.tag ? '<span class="media-tag">' + esc(v.tag) + "</span>" : "") +
       '<button class="play" type="button" aria-label="播放 ' + esc(p.title) + '"><span class="play-ring"></span></button>' +
@@ -135,7 +136,8 @@
 
   function stillsMarkup(p) {
     if (!p.stills || !p.stills.length) return "";
-    return '<div class="still-row">' + p.stills.map(function (s) {
+    var portrait = p.video && p.video.orientation === "portrait";
+    return '<div class="still-row' + (portrait ? " still-row--portrait" : "") + '">' + p.stills.map(function (s) {
       var img = s.image
         ? '<img src="' + esc(s.image) + '" alt="' + esc(s.label) + '" loading="lazy">'
         : slotMarkup("待插入");
@@ -178,12 +180,15 @@
         ? '<a class="work-link" href="' + esc(biliHref(p.video.bilibili)) + '" target="_blank" rel="noopener">在 B 站观看 ↗</a>'
         : "";
 
-      return '<article class="work' + (i % 2 ? " work--flip" : "") + '" data-reveal>' +
-        '<div class="work-media">' + videoMarkup(p, i) + stillsMarkup(p) + "</div>" +
-        '<div class="work-body">' +
+      return '<article class="work' + (i % 2 ? " work--flip" : "") +
+        (p.video && p.video.orientation === "portrait" ? " work--portrait" : "") + '" data-reveal>' +
+        '<div class="work-head">' +
           (tags ? '<div class="tags">' + tags + "</div>" : "") +
           '<h3 class="work-title">' + esc(p.title) + "</h3>" +
           '<p class="work-sub">' + (p.sub || "") + "</p>" +
+        "</div>" +
+        '<div class="work-media">' + videoMarkup(p, i) + stillsMarkup(p) + "</div>" +
+        '<div class="work-body">' +
           (meta ? '<dl class="meta-list">' + meta + "</dl>" : "") +
           (bullets ? '<ul class="bullets">' + bullets + "</ul>" : "") +
           biliLink +
