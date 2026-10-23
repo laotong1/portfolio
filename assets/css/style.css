@@ -891,3 +891,69 @@ table.sop,table.sop td{font-size:13.5px}
 @media (max-width:900px){
   .reel-media{width:100%;max-width:360px;justify-self:center}
 }
+
+/* =========================================================
+   作品：大屏预览 + 接触印样（contact sheet）
+   ========================================================= */
+.film{
+  display:grid;grid-template-columns:minmax(0,330px) minmax(0,1fr);
+  align-items:center;column-gap:clamp(30px,6vw,80px);
+  padding:clamp(40px,6vh,72px) 0;border-top:1px solid var(--line)
+}
+.film--flip .film-media{order:2}
+
+.film-media{
+  position:relative;justify-self:center;
+  height:min(62vh,540px);aspect-ratio:9/16;max-width:100%;
+  background:#000;border:1px solid var(--line);overflow:hidden;cursor:pointer
+}
+.film-media video{width:100%;height:100%;object-fit:cover;display:block;background:#000}
+.film-media .play{
+  position:absolute;inset:0;display:grid;place-items:end end;
+  padding:12px;background:none;border:0;cursor:pointer
+}
+.film-media .play-ring{width:44px;height:44px}
+.film-media .play-ring::after{border-left-width:11px;border-top-width:7px;border-bottom-width:7px}
+
+.film-no{font-family:var(--mono);font-size:11px;letter-spacing:.18em;color:var(--red)}
+.film-title{
+  font-size:clamp(28px,3.6vw,46px);line-height:1.12;
+  font-weight:800;letter-spacing:.02em;margin-top:8px
+}
+.film-fig{font-family:var(--mono);font-size:11.5px;letter-spacing:.12em;color:var(--muted);margin-top:12px}
+.film-line{font-size:clamp(15px,1.4vw,18px);line-height:1.8;color:var(--muted);margin-top:10px;max-width:26em}
+
+/* 接触印样：6 帧 / 时间码 / 上方一道红线 */
+.film-strip{
+  display:grid;grid-template-columns:repeat(6,1fr);gap:6px;
+  margin-top:clamp(20px,3vw,30px);padding-top:10px;
+  border-top:1px solid rgba(216,52,42,.45)
+}
+.film-frame{
+  position:relative;aspect-ratio:9/16;background:#0b0d0f;
+  border:1px solid var(--line);overflow:hidden;margin:0
+}
+.film-frame img{
+  width:100%;height:100%;object-fit:cover;
+  transition:transform .6s var(--ease),filter .4s
+}
+.film-frame:hover img{transform:scale(1.06);filter:brightness(1.12)}
+.film-tc{
+  position:absolute;left:5px;bottom:5px;
+  font-family:var(--mono);font-size:8.5px;letter-spacing:.06em;
+  color:#fff;background:rgba(0,0,0,.62);padding:1px 4px
+}
+.film-link{
+  display:inline-block;margin-top:18px;font-family:var(--mono);font-size:11px;
+  color:var(--fg);border-bottom:1px solid var(--red);padding-bottom:3px
+}
+
+@media (max-width:900px){
+  .film{grid-template-columns:1fr;row-gap:20px;padding:36px 0}
+  .film--flip .film-media{order:0}
+  .film-media{height:auto;width:100%;max-width:340px;justify-self:center}
+  .film-strip{grid-template-columns:repeat(3,1fr)}
+}
+
+/* 翻转行：正文占宽栏，视频占窄栏 */
+.film--flip{grid-template-columns:minmax(0,1fr) minmax(0,330px)}

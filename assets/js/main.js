@@ -160,29 +160,41 @@
     return "https://www.bilibili.com/video/" + extractBvid(val) + "/";
   }
 
-  /* 一屏一段：进入视口才加载并静音预览，离开就停 */
+  /* 作品：大屏预览 + 接触印样（6 帧 / 时间码） */
   function renderWorks() {
     var host = $("#worksList");
     if (!host || !S.projects) return;
+
+    var STAMPS = ["00:03", "00:08", "00:13", "00:18", "00:23", "00:27"];
 
     host.innerHTML = S.projects.map(function (p, i) {
       var v = p.video || {};
       var poster = v.poster ? ' poster="' + esc(v.poster) + '"' : "";
 
-      return '<section class="reel' + (i % 2 ? " reel--flip" : "") + '" id="work-' + esc(p.id) + '" data-reveal>' +
-        '<div class="reel-media" data-video data-bilibili="' + esc(v.bilibili || "") + '" data-mp4="' + esc(v.mp4 || "") + '">' +
+      var strip = STAMPS.map(function (tc, n) {
+        var src = "assets/img/f-" + p.id + "-" + (n + 1) + ".jpg";
+        return '<figure class="film-frame">' +
+          '<img src="' + esc(src) + '" alt="' + esc(p.title) + " 第 " + (n + 1) + ' 帧" loading="lazy" decoding="async">' +
+          '<figcaption class="film-tc">' + tc + "</figcaption>" +
+          "</figure>";
+      }).join("");
+
+      return '<article class="film' + (i % 2 ? " film--flip" : "") + '" id="work-' + esc(p.id) + '" data-reveal>' +
+        '<div class="film-media" data-video data-bilibili="' + esc(v.bilibili || "") + '" data-mp4="' + esc(v.mp4 || "") + '">' +
           '<video muted playsinline loop preload="none"' + poster + ' data-src="' + esc(v.mp4 || "") + '"></video>' +
           '<button class="play" type="button" aria-label="播放 ' + esc(p.title) + '，带声音"><span class="play-ring"></span></button>' +
         "</div>" +
-        '<div class="reel-copy">' +
-          '<p class="reel-figures">' + esc(p.figures || "") + "</p>" +
-          '<h3 class="reel-title">' + esc(p.title) + "</h3>" +
-          '<p class="reel-line">' + esc(p.line || "") + "</p>" +
+        '<div class="film-body">' +
+          '<p class="film-no">' + (i + 1 < 10 ? "0" : "") + (i + 1) + "</p>" +
+          '<h3 class="film-title">' + esc(p.title) + "</h3>" +
+          '<p class="film-fig">' + esc(p.figures || "") + "</p>" +
+          '<p class="film-line">' + esc(p.line || "") + "</p>" +
+          '<div class="film-strip">' + strip + "</div>" +
           ((p.video && p.video.bilibili)
-            ? '<a class="reel-link" href="' + esc(biliHref(p.video.bilibili)) + '" target="_blank" rel="noopener">B 站观看 ↗</a>'
+            ? '<a class="film-link" href="' + esc(biliHref(p.video.bilibili)) + '" target="_blank" rel="noopener">B 站观看 ↗</a>'
             : "") +
         "</div>" +
-        "</section>";
+        "</article>";
     }).join("");
   }
 
