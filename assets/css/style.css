@@ -389,3 +389,85 @@ ul,ol{margin:0;padding:0;list-style:none}
   html{scroll-snap-type:y mandatory}
   .panel{scroll-snap-align:start;scroll-snap-stop:always}
 }
+
+/* =========================================================
+   铺满：内容放大到接近上下边缘
+   ========================================================= */
+.panel{padding:clamp(72px,9vh,104px) var(--pad) clamp(52px,7vh,72px)}
+
+/* 首屏：名字与照片都放到 70vh 级 */
+.hero-name{font-size:clamp(72px,11.5vw,168px)}
+.hero-portrait{height:min(70vh,620px);width:auto;aspect-ratio:3/4}
+.hero-tag{font-size:clamp(19px,2vw,28px)}
+
+/* 作品屏：视频 74vh，接触印样更宽，背景大编号 */
+.panel--work .work-grid{grid-template-columns:minmax(0,420px) minmax(0,1fr);gap:clamp(34px,5vw,90px)}
+.panel--work.is-flip .work-grid{grid-template-columns:minmax(0,1fr) minmax(0,420px)}
+.work-media{height:min(74vh,680px)}
+.work-title{font-size:clamp(34px,4.6vw,66px)}
+.work-strip{max-width:none;margin-top:clamp(22px,4vh,36px);gap:8px}
+.work-frame{border-color:rgba(236,233,226,.18)}
+.ghost{
+  position:absolute;right:calc(var(--pad) - 10px);bottom:-1vh;
+  font-size:38vh;line-height:.78;font-weight:800;letter-spacing:-.03em;
+  color:rgba(236,233,226,.035);pointer-events:none;user-select:none;z-index:0
+}
+.panel--work.is-flip .ghost{right:auto;left:calc(var(--pad) - 10px)}
+.panel--work .work-grid{position:relative;z-index:1}
+
+/* 动作戏：四列拉高 */
+.steps{border-top-width:1px}
+.step{padding:36px 26px 6px}
+.step-k{font-size:clamp(22px,2.4vw,34px)}
+.step-text{font-size:15px;line-height:1.95;margin-top:4px}
+.step-detail{margin-top:14px;font-size:11px}
+
+/* 技术：卡片补回三条要点 */
+.tech-card{padding:clamp(20px,2.2vw,30px)}
+.tech-card ul{margin-top:10px}
+.tech-card li{
+  position:relative;padding-left:13px;font-size:12.8px;line-height:1.75;
+  color:var(--muted);margin-bottom:7px
+}
+.tech-card li::before{
+  content:"";position:absolute;left:0;top:.72em;width:5px;height:1px;background:var(--dim)
+}
+
+/* 数据：数字更大 */
+.stat{padding:clamp(22px,3.4vh,38px) clamp(12px,1.8vw,22px)}
+.stat-n{font-size:clamp(52px,7.4vw,104px)}
+.stat-l{font-size:15px;margin-top:14px}
+
+/* 联系：标题更大 */
+.contact-title{font-size:clamp(48px,7vw,120px)}
+
+/* 面板标题更大，撑住上方 */
+.panel-head h2{font-size:clamp(48px,6.4vw,104px)}
+.panel-head{margin-bottom:clamp(26px,4.5vh,50px)}
+
+/* 背景编号：所有面板通用，压住空白 */
+.ghost{
+  position:absolute;right:calc(var(--pad) - 10px);bottom:-1vh;
+  font-size:38vh;line-height:.78;font-weight:800;letter-spacing:-.03em;
+  color:rgba(236,233,226,.04);pointer-events:none;user-select:none;z-index:0
+}
+.panel.is-flip .ghost{right:auto;left:calc(var(--pad) - 10px)}
+.panel > *:not(.ghost){position:relative;z-index:1}
+.panel--numbers .stats,.panel--numbers .panel-note,.panel--tech .pipe,.panel--tech .tech-row{z-index:1}
+
+/* 文字面板：标题顶到上边、内容压到下边，整屏被撑满 */
+.panel--action,
+.panel--tech,
+.panel--numbers{justify-content:space-between}
+.ghost{color:rgba(236,233,226,.055)}
+.panel--action .steps{margin-top:auto;margin-bottom:auto}
+.panel--tech .pipe{margin-top:auto}
+.panel--numbers .stats{margin-top:auto}
+
+/* 三段内容均匀分布，比 space-between 的中间大洞更稳 */
+.panel--action,
+.panel--tech,
+.panel--numbers{justify-content:space-evenly}
+.panel--action .steps{margin-top:0;margin-bottom:0}
+.panel--tech .pipe{margin-top:0}
+.panel--numbers .stats{margin-top:0}

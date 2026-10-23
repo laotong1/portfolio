@@ -57,6 +57,7 @@
 
     return '<section class="panel panel--work' + (i % 2 ? " is-flip" : "") + '" id="work-' + esc(p.id) +
       '" data-panel data-label="作品 ' + no + '">' +
+      '<span class="ghost" aria-hidden="true">' + no + "</span>" +
       '<div class="work-grid">' +
         '<div class="work-media" data-video data-bilibili="' + esc(v.bilibili || "") + '" data-mp4="' + esc(v.mp4 || "") + '">' +
           '<video muted playsinline loop preload="none"' + poster + ' data-src="' + esc(v.mp4 || "") + '"></video>' +
@@ -113,7 +114,7 @@
         return '<article class="tech-card">' +
           '<p class="mono-label">' + esc(t.label) + "</p>" +
           "<h3>" + esc(t.title) + "</h3>" +
-          "<p>" + esc((t.points || [])[0] || "") + "</p>" +
+          "<ul>" + (t.points || []).map(function (pt) { return "<li>" + esc(pt) + "</li>"; }).join("") + "</ul>" +
           "</article>";
       }).join("");
     }
