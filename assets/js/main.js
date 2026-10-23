@@ -31,19 +31,46 @@
     toastTimer = setTimeout(function () { t.classList.remove("is-on"); }, 3200);
   }
 
+  /* 双向重播：元素进入视口时播，完全离开后复位，
+     下次再进来（无论从上还是从下）继续播。
+     方向由进入时的位置决定：从下面上来 → 上浮；从上面下来 → 下落。 */
   function revealObserve() {
-    var items = $$("[data-reveal]:not(.is-in)");
+    var items = $$("[data-reveal]");
+    if (!items.length) return;
+
     if (!("IntersectionObserver" in window) || reduceMotion) {
       items.forEach(function (n) { n.classList.add("is-in"); });
       return;
     }
+
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) {
-        if (!e.isIntersecting) return;
-        e.target.classList.add("is-in");
-        io.unobserve(e.target);
+        var el = e.target;
+
+        // clip 元素被自身 clip-path 裁成 0 面积，观察器读不到；
+        // 交给 motion.js 按滚动位置处理。
+        if (el.getAttribute("data-reveal") === "clip") return;
+
+        if (e.isIntersecting) {
+          if (el.classList.contains("is-in")) return;
+
+          // 方向：进入瞬间 top < 0，说明它的上沿还在视口外，
+          // 是从上沿"落"下来的；否则是从下沿"升"上来的。
+          var r = el.getBoundingClientRect();
+          var dir = r.top < 0 ? "down" : "up";
+          el.setAttribute("data-dir", dir);
+          // 强制一次样式重算：不这么做，起始位移和 is-in 会合并成一次样式变更，
+          // 过渡会从旧位置开始，"从上方下来"就失效了。
+          void el.offsetWidth;
+
+          el.classList.add("is-in");
+        } else if (el.classList.contains("is-in")) {
+          // 完全离开视口才复位，避免边缘抖动
+          el.classList.remove("is-in");
+        }
       });
-    }, { rootMargin: "0px 0px -8% 0px", threshold: 0.08 });
+    }, { rootMargin: "0px", threshold: 0 });
+
     items.forEach(function (n) { io.observe(n); });
   }
 
@@ -265,25 +292,42 @@
   function runCounters() {
     var nums = $$(".stat-n");
     if (!nums.length) return;
-    if (reduceMotion) {
-      nums.forEach(function (n) { n.textContent = n.dataset.target; });
+
+    if (reduceMotion || !("IntersectionObserver" in window)) {
+      nums.forEach(function (n) {
+        n.textContent = (parseFloat(n.dataset.target) || 0).toLocaleString("en-US");
+      });
       return;
     }
+
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) {
-        if (!e.isIntersecting) return;
-        animateNumber(e.target);
-        io.unobserve(e.target);
+        var n = e.target;
+        if (e.isIntersecting) {
+          animateNumber(n);
+        } else {
+          // 复位：回到 0，下次进来重新数
+          n.dataset.token = "";
+          n.dataset.busy = "0";
+          n.textContent = "0";
+        }
       });
-    }, { threshold: 0.6 });
+    }, { rootMargin: "0px", threshold: 0.5 });
+
     nums.forEach(function (n) { io.observe(n); });
   }
 
   function animateNumber(node) {
     var target = parseFloat(node.dataset.target) || 0;
+    var token = String(Date.now()) + Math.random();
     var start = null;
     var dur = 1300;
+
+    node.dataset.token = token;
+    node.dataset.busy = "1";
+
     function frame(ts) {
+      if (node.dataset.token !== token) return; // 滚出去了，取消
       if (!start) start = ts;
       var p = Math.min((ts - start) / dur, 1);
       var eased = 1 - Math.pow(1 - p, 3);

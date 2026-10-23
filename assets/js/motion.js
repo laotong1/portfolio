@@ -80,9 +80,9 @@
     if (clips.length) {
       var vh = window.innerHeight || 1;
       for (var i = 0; i < clips.length; i++) {
-        if (clips[i].classList.contains("is-in")) continue;
         var r = clips[i].getBoundingClientRect();
-        if (r.top < vh * 0.94 && r.bottom > 0) clips[i].classList.add("is-in");
+        // 在视口里就放行，完全出去就收回，来回都能重播
+        clips[i].classList.toggle("is-in", r.top < vh * 0.9 && r.bottom > 0);
       }
     }
 
