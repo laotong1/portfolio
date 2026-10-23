@@ -4,151 +4,128 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>佟子易 · AI 短剧导演｜《749局猎神》破亿</title>
-<meta name="description" content="佟子易，AI 短剧导演 / 执行导演。导演作品《749局猎神》累计播放 1.0 亿+，在架 7 部短剧；从剧本拆解、分镜设计到成片交付全流程独立负责，国内与海外双版本并行。">
+<meta name="description" content="佟子易，AI 短剧导演 / 执行导演。导演作品《749局猎神》累计播放 1.0 亿+，在架 7 部短剧；从剧本拆解、分镜设计到成片交付全流程独立负责。">
 <meta name="author" content="佟子易">
 <meta name="theme-color" content="#08090a">
-<!-- 部署后把下面两条的域名换成你的真实网址，微信/飞书里转发才会有缩略图 -->
 <meta property="og:type" content="website">
 <meta property="og:title" content="佟子易 · AI 短剧导演｜《749局猎神》破亿">
 <meta property="og:description" content="男频打斗 AI 短剧，从文字到可交付成片的全流程导演。单部累计播放 1.0 亿+。">
 <meta property="og:image" content="assets/img/portrait.jpg">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%2308090a'/%3E%3Crect x='6.5' y='6.5' width='51' height='51' fill='none' stroke='%23d8342a' stroke-width='2'/%3E%3Ctext x='32' y='44' font-family='sans-serif' font-size='30' font-weight='700' fill='%23ece9e2' text-anchor='middle'%3E佟%3C/text%3E%3C/svg%3E">
 <script>
-/* 先标记 js / motion：CSS 据此决定初始隐藏，避免首帧闪一下再收起。
-   3 秒兜底：如果主脚本异常，移除标记让内容直接可见，绝不白屏。 */
+/* 先标记 js / motion：没有 JS 时退化成普通纵向页面，绝不白屏 */
 (function () {
   var d = document.documentElement;
   d.classList.add("js");
   if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) d.classList.add("motion");
   setTimeout(function () {
-    if (!window.__PORTFOLIO_READY) d.classList.remove("js", "motion");
+    if (!window.__SITE_READY) d.classList.remove("js", "motion");
   }, 3000);
 })();
 </script>
 <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
-<a class="skip" href="#works">跳到作品</a>
-<div class="grain" aria-hidden="true"></div>
-<div class="scrollbar" id="scrollbar" aria-hidden="true"></div>
 
-<header class="nav" id="nav">
-  <a class="brand" href="#top"><b>佟子易</b><span>/ TONG ZIYI</span></a>
-  <nav class="nav-links" aria-label="主导航">
-    <a href="#works">作品</a>
-    <a href="#action">动作戏</a>
-    <a href="#tech">技术</a>
-    <a href="#numbers">数据</a>
+<canvas id="particles" aria-hidden="true"></canvas>
+<div class="vignette" aria-hidden="true"></div>
+
+<header class="hud-top">
+  <a class="brand" href="#hero"><b>佟子易</b><span>/ TONG ZIYI</span></a>
+  <nav class="hud-nav" aria-label="主导航">
+    <a href="#works" data-jump="works">作品</a>
+    <a href="#action" data-jump="action">动作戏</a>
+    <a href="#tech" data-jump="tech">技术</a>
+    <a href="#numbers" data-jump="numbers">数据</a>
+    <a href="#contact" data-jump="contact">联系</a>
   </nav>
-  <a class="nav-cta" href="#contact">联系我</a>
 </header>
 
-<main id="top">
+<main class="stage" id="stage">
+  <div class="track" id="track">
 
-  <!-- ================= 01 HERO ================= -->
-  <section class="hero">
-    <div class="hero-inner">
-      <div class="hero-copy">
-        <h1 class="hero-name" data-reveal="chars">佟子易</h1>
-        <p class="hero-role" data-reveal id="heroRole">AI 短剧导演 / 执行导演</p>
-        <p class="hero-tag" data-reveal id="heroTagline"></p>
-        <div class="hero-meta" id="heroMeta" data-reveal></div>
-        <div class="hero-actions" data-reveal>
-          <a class="btn btn-primary" href="#works">看作品</a>
-          <a class="btn" id="resumeBtn" href="#" download>下载简历</a>
-          <a class="btn btn-ghost" href="#contact">联系方式</a>
+    <!-- ================= HERO ================= -->
+    <section class="panel panel--hero" id="hero" data-panel data-label="首屏">
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <p class="kicker"><i class="dot"></i>AI SHORT DRAMA DIRECTOR</p>
+          <h1 class="hero-name" id="heroName">佟子易</h1>
+          <p class="hero-role" id="heroRole"></p>
+          <p class="hero-tag" id="heroTagline"></p>
+          <div class="hero-meta" id="heroMeta"></div>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#works" data-jump="works">看作品</a>
+            <a class="btn" id="resumeBtn" href="#" download>下载简历</a>
+          </div>
         </div>
+        <figure class="hero-portrait">
+          <img src="assets/img/portrait.jpg" alt="佟子易 肖像" width="1730" height="2423" fetchpriority="high" decoding="async">
+        </figure>
       </div>
-      <figure class="hero-portrait" data-reveal>
-        <img src="assets/img/portrait.jpg" alt="佟子易 肖像" width="1730" height="2423" fetchpriority="high" decoding="async">
-        <figcaption class="portrait-cap"><span>2026</span><span>BEIJING</span></figcaption>
-      </figure>
-    </div>
-  </section>
+      <p class="scroll-hint" aria-hidden="true"><span>滚动 / 方向键</span><i>→</i></p>
+    </section>
 
-  <!-- ================= 02 代表作 ================= -->
-  <section class="works" id="works">
-    <div class="works-head">
-      <h2>作品</h2>
-      <span>7 部 · 2026</span>
-    </div>
-    <div id="worksList"></div>
-  </section>
-
-  <!-- ================= 03 动作戏 ================= -->
-  <section class="sec" id="action">
-    <div class="sec-head" data-reveal>
-      <h2>动作戏专项</h2>
-    </div>
-    <p class="lead" id="actionIntro" data-reveal></p>
-    <div class="timeline" id="actionSteps"></div>
-  </section>
-
-  <!-- ================= 04 技术 ================= -->
-  <section class="sec" id="tech">
-    <div class="sec-head" data-reveal>
-      <h2>技术</h2>
-    </div>
-
-    <!-- 产线：滚动驱动的六个环节 -->
-    <div class="pipe" id="pipe" data-reveal>
-      <div class="pipe-top">
-        <p class="mono-label" id="pipeLabel">END-TO-END PIPELINE</p>
-        <p class="pipe-readout" aria-hidden="true"><span id="pipeReadout">0</span>%</p>
+    <!-- ================= ACTION ================= -->
+    <section class="panel panel--action" id="action" data-panel data-label="动作戏">
+      <div class="panel-head">
+        <p class="panel-no">02</p>
+        <h2>动作戏专项</h2>
+        <p class="panel-sub">起势 — 交锋 — 爆点 — 收势</p>
       </div>
-      <h3 class="pipe-title" id="pipeTitle"></h3>
-      <p class="pipe-desc" id="pipeDesc"></p>
-      <div class="pipe-track">
+      <div class="steps" id="actionSteps"></div>
+      <p class="panel-line" id="actionIntro"></p>
+    </section>
+
+    <!-- ================= TECH ================= -->
+    <section class="panel panel--tech" id="tech" data-panel data-label="技术">
+      <div class="panel-head">
+        <p class="panel-no">03</p>
+        <h2>技术</h2>
+        <p class="panel-sub">一条产线，六个环节</p>
+      </div>
+      <div class="pipe" id="pipe">
         <div class="pipe-rail" aria-hidden="true">
           <span class="pipe-fill" id="pipeFill"></span>
           <span class="pipe-head" id="pipeHead"></span>
         </div>
         <ol class="pipe-nodes" id="pipeNodes"></ol>
       </div>
-    </div>
+      <div class="tech-row" id="techRow"></div>
+    </section>
 
-    <div class="tech-grid" id="techGrid"></div>
+    <!-- ================= NUMBERS ================= -->
+    <section class="panel panel--numbers" id="numbers" data-panel data-label="数据">
+      <div class="panel-head">
+        <p class="panel-no">04</p>
+        <h2>数据</h2>
+        <p class="panel-sub">作品后台累计播放 · 截至 2026-10</p>
+      </div>
+      <div class="stats" id="stats"></div>
+      <p class="panel-note" id="statsNote"></p>
+    </section>
 
-    <div class="tech-extra">
-      <article class="flow-card" id="flowCard" data-reveal>
-        <p class="mono-label">SELF-BUILT · OPEN SOURCE</p>
-        <h3>FlowAIGC</h3>
-        <p class="flow-sub">画布式节点工作台 · TypeScript · 20+ 模型聚合</p>
-        <p>把“图在 A 平台、视频去 B 平台、改首尾帧换 C 平台”的来回搬运，收敛到一个节点画布上。本人导演的三部作品全部在该画布上生产。</p>
-        <p class="flow-path"><span>参考图锁主角</span><i>→</i><span>图生视频</span><i>→</i><span>首尾帧补过渡</span></p>
-        <a class="flow-link" id="flowLink" href="https://github.com/laotong1/FlowAIGC" target="_blank" rel="noopener">github.com/laotong1/FlowAIGC <span>↗</span></a>
-      </article>
+    <!-- ================= CONTACT ================= -->
+    <section class="panel panel--contact" id="contact" data-panel data-label="联系">
+      <div class="contact-inner">
+        <p class="panel-no">05</p>
+        <h2 class="contact-title">下一部戏，<br>从一条消息开始。</h2>
+        <a class="contact-mail" id="mailLink" href="#"></a>
+        <div class="contact-links" id="contactLinks"></div>
+      </div>
+    </section>
 
-    </div>
-  </section>
-
-  <!-- ================= 05 数据 ================= -->
-  <section class="sec sec-stats" id="numbers">
-    <div class="sec-head" data-reveal>
-      <h2>数据</h2>
-    </div>
-    <div class="stats" id="stats"></div>
-    <p class="note" id="statsNote" data-reveal></p>
-  </section>
-
-  <!-- ================= 06 联系 ================= -->
-  <section class="sec contact" id="contact">
-    <h2 class="contact-h" data-reveal="clip">下一部戏，<br>从一条消息开始。</h2>
-    <a class="mail" id="mailLink" href="#" data-reveal></a>
-    <div class="contact-links" id="contactLinks" data-reveal></div>
-  </section>
+  </div>
 </main>
 
-<footer class="footer">
-  <p>© 2026 佟子易 · AI 短剧导演</p>
-  <p class="mono-label">STATIC SITE · 任何设备可直接打开</p>
+<footer class="hud-bottom">
+  <span class="hud-count"><b id="panelNow">01</b> / <em id="panelTotal">12</em></span>
+  <span class="hud-label" id="panelLabel">首屏</span>
+  <div class="hud-bar" aria-hidden="true"><i id="hudFill"></i></div>
 </footer>
 
-<button class="to-top" id="toTop" type="button" aria-label="回到顶部">
-  <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="square"/></svg>
-</button>
+<nav class="dots" id="dots" aria-label="页面导航"></nav>
 
-<div class="lightbox" id="lightbox" hidden role="dialog" aria-modal="true" aria-label="作品剧照">
+<div class="lightbox" id="lightbox" hidden role="dialog" aria-modal="true" aria-label="剧照">
   <button class="lb-close" id="lbClose" aria-label="关闭">✕</button>
   <figure><img id="lbImg" alt=""><figcaption id="lbCap"></figcaption></figure>
 </div>
@@ -159,6 +136,6 @@
 
 <script src="assets/js/content.js"></script>
 <script src="assets/js/main.js"></script>
-<script src="assets/js/motion.js"></script>
+<script src="assets/js/particles.js"></script>
 </body>
 </html>
