@@ -201,8 +201,33 @@
 
   /* ------------------------------ stage ------------------------------ */
   var nextFrame = window.requestAnimationFrame;
-  var panels = [], dots = [], x = 0, target = 0, maxX = 0, vw = 0, locked = false;
+  var panels = [], vw = 0, cur = 0, goal = 0, vel = 0;
+  var wheelAcc = 0, wheelFlipped = false, lastWheel = 0, locked = false;
   var pipeEl = null, pipeNodes = [];
+
+  function isStage() { return window.matchMedia("(min-width: 981px)").matches; }
+
+  function measure() {
+    vw = window.innerWidth || 1;
+    goal = Math.max(0, Math.min(panels.length - 1, goal));
+    if (!isStage()) { cur = 0; vel = 0; }
+  }
+
+  function apply() {
+    var track = $("#track");
+    if (track) track.style.transform = "translate3d(" + (-cur * vw).toFixed(2) + "px,0,0)";
+  }
+
+  function currentIndex() {
+    if (isStage()) return Math.max(0, Math.min(panels.length - 1, Math.round(cur)));
+    var best = 0, bd = Infinity;
+    panels.forEach(function (p, i) {
+      var r = p.getBoundingClientRect();
+      var d = Math.abs(r.top);
+      if (d < bd) { bd = d; best = i; }
+    });
+    return best;
+  }
 
   /* 产线进度：横屏时按横向位置，竖屏时按视口位置 */
   function techProgress() {
@@ -227,30 +252,6 @@
     }
   }
 
-  function isStage() { return window.matchMedia("(min-width: 981px)").matches; }
-
-  function measure() {
-    vw = window.innerWidth;
-    maxX = Math.max(0, $(".track").scrollWidth - vw);
-    target = Math.min(Math.max(target, 0), maxX);
-  }
-
-  function apply() {
-    var track = $("#track");
-    if (track) track.style.transform = "translate3d(" + (-x).toFixed(2) + "px,0,0)";
-  }
-
-  function currentIndex() {
-    if (isStage()) return Math.round(x / vw);
-    var best = 0, bd = Infinity;
-    panels.forEach(function (p, i) {
-      var r = p.getBoundingClientRect();
-      var d = Math.abs(r.top);
-      if (d < bd) { bd = d; best = i; }
-    });
-    return best;
-  }
-
   function hud() {
     var idx = currentIndex() + 1;
     idx = Math.max(1, Math.min(panels.length, idx));
@@ -258,7 +259,7 @@
     if (now) now.textContent = (idx < 10 ? "0" : "") + idx;
     if (total) total.textContent = panels.length;
     if (label) label.textContent = panels[idx - 1].dataset.label || "";
-    if (fill) fill.style.transform = "scaleX(" + (maxX > 0 ? x / maxX : 0).toFixed(4) + ")";
+    if (fill) fill.style.transform = "scaleX(" + (panels.length > 1 ? cur / (panels.length - 1) : 0).toFixed(4) + ")";
 
     $$(".dots button").forEach(function (b, i) { b.classList.toggle("is-on", i === idx - 1); });
 
@@ -270,18 +271,27 @@
     });
   }
 
-  function loop() {
-    x += (target - x) * 0.115;
-    if (Math.abs(target - x) < 0.4) x = target;
+  function goTo(i) {
+    goal = Math.max(0, Math.min(panels.length - 1, i));
+    if (reduceMotion) { cur = goal; vel = 0; }
+  }
+
+  /* 物理弹簧：ω=20, ζ=0.62 → 约 5% 过冲，550ms 落定 */
+  var lastT = 0;
+  function loop(t) {
+    var dt = lastT ? Math.min((t - lastT) / 1000, 1 / 30) : 1 / 60;
+    lastT = t;
+    if (isStage()) {
+      var ST = 400, DP = 24.8;
+      var a = -ST * (cur - goal) - DP * vel;
+      vel += a * dt;
+      cur += vel * dt;
+      if (Math.abs(goal - cur) < 0.0008 && Math.abs(vel) < 0.0008) { cur = goal; vel = 0; }
+    }
     apply();
     hud();
     paintPipe();
     nextFrame(loop);
-  }
-
-  function goTo(i) {
-    i = Math.max(0, Math.min(panels.length - 1, i));
-    target = i * vw;
   }
 
   function setupStage() {
@@ -293,8 +303,7 @@
       dotsHost.innerHTML = panels.map(function (p, i) {
         return '<button type="button" aria-label="' + esc(p.dataset.label || ("第 " + (i + 1) + " 屏")) + '"></button>';
       }).join("");
-      dots = $$("button", dotsHost);
-      dots.forEach(function (b, i) {
+      $$("button", dotsHost).forEach(function (b, i) {
         b.addEventListener("click", function () { goTo(i); });
       });
     }
@@ -302,17 +311,30 @@
     if (isStage() && !locked) {
       locked = true;
       document.body.classList.add("is-stage");
+
       window.addEventListener("wheel", function (e) {
         if (!isStage()) return;
         e.preventDefault();
-        target += (e.deltaY + e.deltaX) * 1.15;
-        target = Math.min(Math.max(target, 0), maxX);
+
+        var now = performance.now();
+        // 一次手势只翻一屏：停顿超过 120ms 才算新手势
+        if (now - lastWheel > 120) { wheelAcc = 0; wheelFlipped = false; }
+        lastWheel = now;
+
+        if (wheelFlipped) return;
+        wheelAcc += e.deltaY + e.deltaX;
+
+        if (Math.abs(wheelAcc) >= 56) {
+          goTo(goal + (wheelAcc > 0 ? 1 : -1));
+          wheelAcc = 0;
+          wheelFlipped = true;
+        }
       }, { passive: false });
 
       window.addEventListener("keydown", function (e) {
         if (!isStage()) return;
-        if (e.key === "ArrowRight" || e.key === "PageDown") { e.preventDefault(); goTo(Math.round(x / vw) + 1); }
-        if (e.key === "ArrowLeft" || e.key === "PageUp") { e.preventDefault(); goTo(Math.round(x / vw) - 1); }
+        if (e.key === "ArrowRight" || e.key === "PageDown" || e.key === " ") { e.preventDefault(); goTo(goal + 1); }
+        if (e.key === "ArrowLeft" || e.key === "PageUp") { e.preventDefault(); goTo(goal - 1); }
         if (e.key === "Home") { e.preventDefault(); goTo(0); }
         if (e.key === "End") { e.preventDefault(); goTo(panels.length - 1); }
       });
@@ -333,7 +355,7 @@
 
     window.addEventListener("resize", function () {
       measure();
-      if (!isStage()) { x = 0; target = 0; apply(); }
+      if (!isStage()) { cur = 0; goal = 0; vel = 0; apply(); }
     });
   }
 

@@ -383,3 +383,9 @@ ul,ol{margin:0;padding:0;list-style:none}
   .js .panel{opacity:1;transform:none}
   #particles{display:none}
 }
+
+/* 手机上用原生整屏吸附：一划一屏 */
+@media (max-width:980px){
+  html{scroll-snap-type:y mandatory}
+  .panel{scroll-snap-align:start;scroll-snap-stop:always}
+}
