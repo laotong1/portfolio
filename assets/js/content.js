@@ -61,7 +61,7 @@ window.SITE = {
         { k: "体量", v: "40 集 · 播放 100,592,178" },
         { k: "产线", v: "自研 FlowAIGC 画布" }
       ],
-      video: { bilibili: "", mp4: "assets/video/749.mp4", poster: "assets/img/749-poster.jpg", tag: "30s 成片", orientation: "portrait" },
+      video: { bilibili: "", mp4: "assets/video/749.mp4", poster: "assets/img/749-poster.jpg", orientation: "portrait" },
       stills: [
         { label: "开场", caption: "母子在村口，先给关系", image: "assets/img/749-1.jpg" },
         { label: "对峙", caption: "男人的反应镜头", image: "assets/img/749-2.jpg" },
@@ -90,7 +90,7 @@ window.SITE = {
         { k: "发行", v: "海外平台" },
         { k: "版本", v: "国内版 / 海外版并行" }
       ],
-      video: { bilibili: "", mp4: "assets/video/witcher.mp4", poster: "assets/img/witcher-poster.jpg", tag: "30s 成片", orientation: "portrait" },
+      video: { bilibili: "", mp4: "assets/video/witcher.mp4", poster: "assets/img/witcher-poster.jpg", orientation: "portrait" },
       stills: [
         { label: "爆点", caption: "火场，声音先到", image: "assets/img/witcher-1.jpg" },
         { label: "转场", caption: "绿色传送门，空间切换", image: "assets/img/witcher-2.jpg" },
@@ -118,7 +118,7 @@ window.SITE = {
         { k: "发行", v: "海外平台" },
         { k: "意义", v: "验证产线可跨题材复用" }
       ],
-      video: { bilibili: "", mp4: "assets/video/dragon.mp4", poster: "assets/img/dragon-poster.jpg", tag: "30s 成片", orientation: "portrait" },
+      video: { bilibili: "", mp4: "assets/video/dragon.mp4", poster: "assets/img/dragon-poster.jpg", orientation: "portrait" },
       stills: [
         { label: "出征", caption: "骑手与长枪，力量朝右", image: "assets/img/dragon-1.jpg" },
         { label: "对峙", caption: "龙与人的体量差", image: "assets/img/dragon-2.jpg" },
@@ -145,7 +145,7 @@ window.SITE = {
         { k: "题材", v: "都市复仇" },
         { k: "产线", v: "同一套模板与参数规范" }
       ],
-      video: { bilibili: "", mp4: "assets/video/more-revenge.mp4", poster: "assets/img/more-revenge.jpg", tag: "30s 成片", orientation: "portrait" },
+      video: { bilibili: "", mp4: "assets/video/more-revenge.mp4", poster: "assets/img/more-revenge.jpg", orientation: "portrait" },
       stills: [
         { label: "开场", caption: "车内对峙，先给压迫感", image: "assets/img/more-revenge-1.jpg" },
         { label: "推进", caption: "后视镜里的追踪视点", image: "assets/img/more-revenge-2.jpg" },
@@ -160,14 +160,14 @@ window.SITE = {
     {
       id: "aether",
       tags: ["同类作品", "西幻战争", "60 集"],
-      title: "西幻 · 战争",
+      title: "《艾瑟尔加德》",
       sub: "同类作品 · 同一条 AI 产线",
       meta: [
         { k: "体量", v: "60 集" },
         { k: "题材", v: "西幻守城" },
         { k: "产线", v: "群像与大场面合成" }
       ],
-      video: { bilibili: "", mp4: "assets/video/more-aether.mp4", poster: "assets/img/more-aether.jpg", tag: "30s 成片", orientation: "portrait" },
+      video: { bilibili: "", mp4: "assets/video/more-aether.mp4", poster: "assets/img/more-aether.jpg", orientation: "portrait" },
       stills: [
         { label: "破门", caption: "金色能量爆开城门", image: "assets/img/more-aether-1.jpg" },
         { label: "王", caption: "Aiden 的眼睛先亮", image: "assets/img/more-aether-2.jpg" },
@@ -181,44 +181,44 @@ window.SITE = {
     },
     {
       id: "river",
-      tags: ["同类作品", "民国悬疑", "40 集"],
-      title: "民国 · 悬疑",
+      tags: ["同类作品", "749 秘档", "40 集"],
+      title: "《749秘档之灵族入海》",
       sub: "同类作品 · 同一条 AI 产线",
       meta: [
-        { k: "体量", v: "40 集" },
-        { k: "题材", v: "民国江兽" },
+        { k: "体量", v: "40 集 · 播放 18,415,674" },
+        { k: "题材", v: "民国 · 超自然" },
         { k: "产线", v: "年代质感统一" }
       ],
-      video: { bilibili: "", mp4: "assets/video/more-river.mp4", poster: "assets/img/more-river.jpg", tag: "30s 成片", orientation: "portrait" },
+      video: { bilibili: "", mp4: "assets/video/more-river.mp4", poster: "assets/img/more-river.jpg", orientation: "portrait" },
       stills: [
         { label: "街", caption: "人力车与围观人群", image: "assets/img/more-river-1.jpg" },
         { label: "车", caption: "督导局长到场", image: "assets/img/more-river-2.jpg" },
         { label: "人", caption: "白西装与礼帽的分量", image: "assets/img/more-river-3.jpg" }
       ],
       bullets: [
-        "民国十七年的江兽事件，气氛与悬念优先于动作。",
+        "749 秘档系列，民国背景加超自然事件，气氛先于动作。",
         "同一套管线切到年代戏：服装、街景、色调要一起钉死。"
       ],
       breakdown: []
     },
     {
       id: "city",
-      tags: ["同类作品", "都市悬疑", "43 集"],
-      title: "都市 · 悬疑",
+      tags: ["同类作品", "都市悬疑", "41 集"],
+      title: "《撕开机器人的伪装》",
       sub: "同类作品 · 同一条 AI 产线",
       meta: [
-        { k: "体量", v: "43 集" },
-        { k: "题材", v: "都市情感 + 反转" },
+        { k: "体量", v: "41 集 · 播放 2,000,274" },
+        { k: "题材", v: "都市情感 + 机器人" },
         { k: "产线", v: "对白驱动，剪辑定节奏" }
       ],
-      video: { bilibili: "", mp4: "assets/video/more-city.mp4", poster: "assets/img/more-city.jpg", tag: "30s 成片", orientation: "portrait" },
+      video: { bilibili: "", mp4: "assets/video/more-city.mp4", poster: "assets/img/more-city.jpg", orientation: "portrait" },
       stills: [
         { label: "情绪", caption: "Victoria 的崩溃特写", image: "assets/img/more-city-1.jpg" },
         { label: "反转", caption: "同一个人，换一副面孔", image: "assets/img/more-city-2.jpg" },
         { label: "幕后", caption: "AR 与董事会摊牌", image: "assets/img/more-city-3.jpg" }
       ],
       bullets: [
-        "都市情感加悬疑反转，靠对白推进，节奏由剪辑定。",
+        "都市情感加机器人设定，反转靠信息差，靠对白推进。",
         "同一产线做现代戏，重点从动作转到表演与反应镜头。"
       ],
       breakdown: []
