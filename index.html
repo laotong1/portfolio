@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>佟子易 · AI 短剧导演 / 执行导演</title>
+<meta name="description" content="佟子易，AI 短剧导演 / 执行导演，专注男频打斗题材。独立完成从剧本拆解、分镜设计到成片交付的全流程，国内与海外双版本并行输出。代表作《749 局：灵族入海》《猎魔人》《驯龙高手》。">
+<meta name="author" content="佟子易">
+<meta name="theme-color" content="#08090a">
+<!-- 部署后把下面两条的域名换成你的真实网址，微信/飞书里转发才会有缩略图 -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="佟子易 · AI 短剧导演 / 执行导演">
+<meta property="og:description" content="男频打斗 AI 短剧，从文字到可交付成片的全流程导演。">
+<meta property="og:image" content="assets/img/portrait.jpg">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%2308090a'/%3E%3Crect x='6.5' y='6.5' width='51' height='51' fill='none' stroke='%23d8342a' stroke-width='2'/%3E%3Ctext x='32' y='44' font-family='sans-serif' font-size='30' font-weight='700' fill='%23ece9e2' text-anchor='middle'%3E佟%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+<a class="skip" href="#works">跳到作品</a>
+<div class="grain" aria-hidden="true"></div>
+
+<header class="nav" id="nav">
+  <a class="brand" href="#top"><b>佟子易</b><span>/ TONG ZIYI</span></a>
+  <nav class="nav-links" aria-label="主导航">
+    <a href="#works">作品</a>
+    <a href="#action">动作戏</a>
+    <a href="#tech">技术</a>
+    <a href="#numbers">数据</a>
+  </nav>
+  <a class="nav-cta" href="#contact">联系我</a>
+</header>
+
+<main id="top">
+
+  <!-- ================= 01 HERO ================= -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-copy">
+        <p class="eyebrow" data-reveal><i class="dot"></i>AI SHORT DRAMA DIRECTOR · 北京</p>
+        <h1 class="hero-name" data-reveal>佟子易</h1>
+        <p class="hero-role" data-reveal id="heroRole">AI 短剧导演 / 执行导演</p>
+        <p class="hero-tag" data-reveal id="heroTagline"></p>
+        <div class="hero-meta" id="heroMeta" data-reveal></div>
+        <div class="hero-actions" data-reveal>
+          <a class="btn btn-primary" href="#works">看作品</a>
+          <a class="btn" id="resumeBtn" href="#" download>下载简历</a>
+          <a class="btn btn-ghost" href="#contact">联系方式</a>
+        </div>
+      </div>
+      <figure class="hero-portrait" data-reveal>
+        <img src="assets/img/portrait.jpg" alt="佟子易 肖像" width="1730" height="2423">
+        <figcaption class="portrait-cap"><span>2026</span><span>BEIJING</span></figcaption>
+      </figure>
+    </div>
+    <div class="hero-strip" aria-hidden="true">
+      <div class="strip-track" id="stripTrack"></div>
+    </div>
+  </section>
+
+  <!-- ================= 02 代表作 ================= -->
+  <section class="sec" id="works">
+    <div class="sec-head" data-reveal>
+      <span class="sec-num">01</span>
+      <div class="sec-title">
+        <h2>代表作</h2>
+        <p class="sec-en">SELECTED WORKS</p>
+      </div>
+      <p class="sec-desc">不罗列片单。每部只讲三件事：我负责什么、我怎么做的、卡在哪又怎么解的。</p>
+    </div>
+    <div class="works" id="worksList"></div>
+  </section>
+
+  <!-- ================= 03 动作戏 ================= -->
+  <section class="sec" id="action">
+    <div class="sec-head" data-reveal>
+      <span class="sec-num">02</span>
+      <div class="sec-title">
+        <h2>动作戏专项</h2>
+        <p class="sec-en">FIGHT CHOREOGRAPHY</p>
+      </div>
+      <p class="sec-desc">男频打斗的差异化不在“会不会打”，而在“这一刀为什么这么切”。</p>
+    </div>
+    <p class="lead" id="actionIntro" data-reveal></p>
+    <div class="timeline" id="actionSteps"></div>
+    <blockquote class="quote" id="actionQuote" data-reveal></blockquote>
+  </section>
+
+  <!-- ================= 04 技术 ================= -->
+  <section class="sec" id="tech">
+    <div class="sec-head" data-reveal>
+      <span class="sec-num">03</span>
+      <div class="sec-title">
+        <h2>技术页</h2>
+        <p class="sec-en">PIPELINE &amp; TOOLS</p>
+      </div>
+      <p class="sec-desc">懂技术的导演：把“人肉跑图”变成可复用产线，把经验固化成模板、参数与验收标准。</p>
+    </div>
+    <div class="tech-grid" id="techGrid"></div>
+
+    <div class="tech-extra">
+      <article class="flow-card" id="flowCard" data-reveal>
+        <p class="mono-label">SELF-BUILT · OPEN SOURCE</p>
+        <h3>FlowAIGC</h3>
+        <p class="flow-sub">画布式节点工作台 · TypeScript · 20+ 模型聚合</p>
+        <p>把“图在 A 平台、视频去 B 平台、改首尾帧换 C 平台”的来回搬运，收敛到一个节点画布上。本人导演的三部作品全部在该画布上生产。</p>
+        <p class="flow-path"><span>参考图锁主角</span><i>→</i><span>图生视频</span><i>→</i><span>首尾帧补过渡</span></p>
+        <a class="flow-link" id="flowLink" href="https://github.com/laotong1/FlowAIGC" target="_blank" rel="noopener">github.com/laotong1/FlowAIGC <span>↗</span></a>
+      </article>
+
+      <div class="table-wrap" data-reveal>
+        <p class="mono-label">MODEL REVIEW SOP</p>
+        <table class="sop">
+          <thead><tr id="sopHead"></tr></thead>
+          <tbody id="sopBody"></tbody>
+        </table>
+        <p class="table-note">横评先定维度再跑片，输出选型报告支撑产线决策，缩短新模型落地周期。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 05 数据 ================= -->
+  <section class="sec sec-stats" id="numbers">
+    <div class="sec-head" data-reveal>
+      <span class="sec-num">04</span>
+      <div class="sec-title">
+        <h2>数据</h2>
+        <p class="sec-en">BY THE NUMBERS</p>
+      </div>
+      <p class="sec-desc">能被追问的口径才写上来。产量、周期、成本，逐个说清怎么算的。</p>
+    </div>
+    <div class="stats" id="stats"></div>
+    <p class="note" id="statsNote" data-reveal></p>
+  </section>
+
+  <!-- ================= 06 联系 ================= -->
+  <section class="sec contact" id="contact">
+    <p class="eyebrow" data-reveal><i class="dot"></i>CONTACT</p>
+    <h2 class="contact-h" data-reveal>下一部戏，<br>从一条消息开始。</h2>
+    <a class="mail" id="mailLink" href="#" data-reveal></a>
+    <div class="contact-grid" id="contactGrid" data-reveal></div>
+  </section>
+</main>
+
+<footer class="footer">
+  <p>© 2026 佟子易 · AI 短剧导演</p>
+  <p class="mono-label">STATIC SITE · 任何设备可直接打开</p>
+</footer>
+
+<div class="lightbox" id="lightbox" hidden>
+  <button class="lb-close" id="lbClose" aria-label="关闭">✕</button>
+  <figure><img id="lbImg" alt=""><figcaption id="lbCap"></figcaption></figure>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<noscript><p class="noscript">请开启 JavaScript 查看完整作品集，或直接下载简历：<a href="assets/pdf/resume-director.pdf">执行导演版</a> · <a href="assets/pdf/resume-aigc.pdf">AIGC 技术版</a></p></noscript>
+
+<script src="assets/js/content.js"></script>
+<script src="assets/js/main.js"></script>
+</body>
+</html>
