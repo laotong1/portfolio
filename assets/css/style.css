@@ -471,3 +471,59 @@ ul,ol{margin:0;padding:0;list-style:none}
 .panel--action .steps{margin-top:0;margin-bottom:0}
 .panel--tech .pipe{margin-top:0}
 .panel--numbers .stats{margin-top:0}
+
+/* =========================================================
+   1) 视频成为页面主体：高度吃到 84vh，宽度跟着放到 480
+   ========================================================= */
+.panel--work{
+  padding-top:clamp(68px,8vh,92px);
+  padding-bottom:clamp(46px,6vh,64px)
+}
+.panel--work .work-grid{
+  grid-template-columns:minmax(0,480px) minmax(0,1fr);
+  gap:clamp(36px,5vw,96px)
+}
+.panel--work.is-flip .work-grid{grid-template-columns:minmax(0,1fr) minmax(0,480px)}
+.work-media{
+  height:min(84vh,800px);
+  box-shadow:0 30px 90px rgba(0,0,0,.55),0 0 0 1px rgba(236,233,226,.06)
+}
+.work-title{font-size:clamp(38px,4.9vw,72px)}
+.work-fig{font-size:12.5px;margin-top:16px}
+.work-line{font-size:clamp(16px,1.45vw,20px);margin-top:12px}
+.work-strip{margin-top:clamp(26px,4.5vh,42px);gap:9px}
+
+/* =========================================================
+   2) 技术页：卡片与产线字号整体提一档
+   ========================================================= */
+.tech-card{padding:clamp(24px,2.6vw,36px)}
+.tech-card .mono-label{font-size:11px;letter-spacing:.2em}
+.tech-card h3{font-size:clamp(19px,1.8vw,25px);margin:12px 0 10px;line-height:1.3}
+.tech-card ul{margin-top:12px}
+.tech-card li{font-size:14.5px;line-height:1.85;margin-bottom:10px;padding-left:14px}
+.tech-card li::before{top:.78em;width:6px}
+
+.pipe-node b{font-size:15px;letter-spacing:.02em}
+.pipe-node em{font-size:10.5px;margin-top:7px;letter-spacing:.06em}
+.pn-dot{width:11px;height:11px;margin:54px auto 14px}
+.pipe-nodes{margin-top:-58px}
+.panel--tech .panel-sub{font-size:12px;letter-spacing:.14em}
+.panel--tech .panel-head h2{font-size:clamp(52px,6.8vw,112px)}
+
+/* 技术卡改 2×2：字号能再大一档 */
+.tech-row{grid-template-columns:repeat(2,1fr)}
+.tech-card{padding:clamp(22px,2.2vw,30px)}
+.tech-card h3{font-size:clamp(20px,1.7vw,24px);margin:10px 0 8px}
+.tech-card li{font-size:15px;line-height:1.8;margin-bottom:8px}
+.tech-card ul{margin-top:10px}
+
+/* 回四列：2×2 会溢出 92px，四列把字号控制在 22px 内刚好不折行 */
+.tech-row{grid-template-columns:repeat(4,1fr)}
+.tech-card{padding:clamp(22px,2.4vw,30px)}
+.tech-card h3{font-size:clamp(18px,1.5vw,22px);margin:10px 0 8px;white-space:nowrap}
+.tech-card li{font-size:14.5px;line-height:1.8;margin-bottom:8px}
+
+/* 修：nowrap 撑破 1fr 的 min-content，导致列宽不等、整列被撑高 */
+.tech-row{grid-template-columns:repeat(4,minmax(0,1fr))}
+.tech-card h3{white-space:normal;font-size:clamp(18px,1.45vw,21px)}
+.tech-card{min-width:0}
