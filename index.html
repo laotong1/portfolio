@@ -13,11 +13,24 @@
 <meta property="og:description" content="男频打斗 AI 短剧，从文字到可交付成片的全流程导演。">
 <meta property="og:image" content="assets/img/portrait.jpg">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%2308090a'/%3E%3Crect x='6.5' y='6.5' width='51' height='51' fill='none' stroke='%23d8342a' stroke-width='2'/%3E%3Ctext x='32' y='44' font-family='sans-serif' font-size='30' font-weight='700' fill='%23ece9e2' text-anchor='middle'%3E佟%3C/text%3E%3C/svg%3E">
+<script>
+/* 先标记 js / motion：CSS 据此决定初始隐藏，避免首帧闪一下再收起。
+   3 秒兜底：如果主脚本异常，移除标记让内容直接可见，绝不白屏。 */
+(function () {
+  var d = document.documentElement;
+  d.classList.add("js");
+  if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) d.classList.add("motion");
+  setTimeout(function () {
+    if (!window.__PORTFOLIO_READY) d.classList.remove("js", "motion");
+  }, 3000);
+})();
+</script>
 <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
 <a class="skip" href="#works">跳到作品</a>
 <div class="grain" aria-hidden="true"></div>
+<div class="scrollbar" id="scrollbar" aria-hidden="true"></div>
 
 <header class="nav" id="nav">
   <a class="brand" href="#top"><b>佟子易</b><span>/ TONG ZIYI</span></a>
@@ -37,7 +50,7 @@
     <div class="hero-inner">
       <div class="hero-copy">
         <p class="eyebrow" data-reveal><i class="dot"></i>AI SHORT DRAMA DIRECTOR · 北京</p>
-        <h1 class="hero-name" data-reveal>佟子易</h1>
+        <h1 class="hero-name" data-reveal="chars">佟子易</h1>
         <p class="hero-role" data-reveal id="heroRole">AI 短剧导演 / 执行导演</p>
         <p class="hero-tag" data-reveal id="heroTagline"></p>
         <div class="hero-meta" id="heroMeta" data-reveal></div>
@@ -95,6 +108,24 @@
       </div>
       <p class="sec-desc">懂技术的导演：把“人肉跑图”变成可复用产线，把经验固化成模板、参数与验收标准。</p>
     </div>
+
+    <!-- 产线：滚动驱动的六个环节 -->
+    <div class="pipe" id="pipe" data-reveal>
+      <div class="pipe-top">
+        <p class="mono-label" id="pipeLabel">END-TO-END PIPELINE</p>
+        <p class="pipe-readout" aria-hidden="true"><span id="pipeReadout">0</span>%</p>
+      </div>
+      <h3 class="pipe-title" id="pipeTitle"></h3>
+      <p class="pipe-desc" id="pipeDesc"></p>
+      <div class="pipe-track">
+        <div class="pipe-rail" aria-hidden="true">
+          <span class="pipe-fill" id="pipeFill"></span>
+          <span class="pipe-head" id="pipeHead"></span>
+        </div>
+        <ol class="pipe-nodes" id="pipeNodes"></ol>
+      </div>
+    </div>
+
     <div class="tech-grid" id="techGrid"></div>
 
     <div class="tech-extra">
@@ -135,7 +166,7 @@
   <!-- ================= 06 联系 ================= -->
   <section class="sec contact" id="contact">
     <p class="eyebrow" data-reveal><i class="dot"></i>CONTACT</p>
-    <h2 class="contact-h" data-reveal>下一部戏，<br>从一条消息开始。</h2>
+    <h2 class="contact-h" data-reveal="clip">下一部戏，<br>从一条消息开始。</h2>
     <a class="mail" id="mailLink" href="#" data-reveal></a>
     <div class="contact-grid" id="contactGrid" data-reveal></div>
   </section>
@@ -157,5 +188,6 @@
 
 <script src="assets/js/content.js"></script>
 <script src="assets/js/main.js"></script>
+<script src="assets/js/motion.js"></script>
 </body>
 </html>

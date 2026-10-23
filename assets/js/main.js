@@ -48,6 +48,17 @@
   }
 
   /* ------------------------------ hero ------------------------------ */
+  function splitName() {
+    var el = $(".hero-name");
+    if (!el || !document.documentElement.classList.contains("motion")) return;
+    var txt = (el.textContent || "").trim();
+    if (!txt) return;
+    el.setAttribute("aria-label", txt);
+    el.innerHTML = txt.split("").map(function (c, i) {
+      return '<span class="ch" aria-hidden="true" style="transition-delay:' + (110 + i * 70) + 'ms">' + esc(c) + "</span>";
+    }).join("");
+  }
+
   function renderHero() {
     var tag = $("#heroTagline");
     if (tag) tag.innerHTML = S.tagline || "";
@@ -207,6 +218,26 @@
     }
   }
 
+  /* ------------------------------ pipeline ------------------------------ */
+  function renderPipeline() {
+    var P = S.pipeline;
+    var host = $("#pipeNodes");
+    if (!host || !P) return;
+
+    var lbl = $("#pipeLabel"), title = $("#pipeTitle"), desc = $("#pipeDesc");
+    if (lbl) lbl.textContent = P.label;
+    if (title) title.textContent = P.title;
+    if (desc) desc.textContent = P.desc;
+
+    host.innerHTML = P.steps.map(function (s, i) {
+      return '<li class="pipe-node" data-i="' + i + '">' +
+        '<span class="pn-dot" aria-hidden="true"></span>' +
+        "<b>" + esc(s.k) + "</b>" +
+        "<em>" + esc(s.s) + "</em>" +
+        "</li>";
+    }).join("");
+  }
+
   /* ------------------------------ stats ------------------------------ */
   var counters = [];
 
@@ -223,6 +254,7 @@
         "</p>" +
         '<p class="stat-l">' + esc(s.label) + "</p>" +
         '<p class="stat-s">' + esc(s.sub || "") + "</p>" +
+        (s.bar ? '<span class="stat-bar"><i style="--v:' + s.bar + '%"></i></span>' : "") +
         "</div>";
     }).join("");
 
@@ -405,9 +437,11 @@
   /* ------------------------------ boot ------------------------------ */
   function boot() {
     renderHero();
+    splitName();
     renderWorks();
     renderAction();
     renderTech();
+    renderPipeline();
     renderStats();
     renderContact();
     setupVideo();
@@ -415,6 +449,8 @@
     setupNav();
     revealObserve();
     runCounters();
+    window.__PORTFOLIO_READY = true;
+    document.dispatchEvent(new CustomEvent("portfolio:ready"));
   }
 
   if (document.readyState === "loading") {
