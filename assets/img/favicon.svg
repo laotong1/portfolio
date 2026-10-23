@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" fill="#08090a"/>
+  <rect x="6.5" y="6.5" width="51" height="51" fill="none" stroke="#d8342a" stroke-width="2"/>
+  <text x="32" y="45" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="32" font-weight="700" fill="#ece9e2" text-anchor="middle">佟</text>
+</svg>

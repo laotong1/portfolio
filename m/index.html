@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>佟子易 · AI 短剧导演｜作品</title>
+<meta name="description" content="佟子易，AI 短剧导演。《749局猎神》累计播放 1.0 亿+，在架 7 部短剧。">
+<meta name="theme-color" content="#08090a">
+<meta property="og:title" content="佟子易 · AI 短剧导演">
+<meta property="og:description" content="单部累计播放 1.0 亿+，在架 7 部短剧。">
+<link rel="icon" href="../assets/img/favicon.svg">
+<link rel="stylesheet" href="mobile.css">
+</head>
+<body>
+
+<div class="progress" aria-hidden="true"><i id="progressFill"></i></div>
+
+<main id="feed">
+
+  <!-- 首屏 -->
+  <section class="slide slide--hero" id="top">
+    <p class="kicker">AI SHORT DRAMA DIRECTOR</p>
+    <h1 class="name" id="heroName">佟子易</h1>
+    <p class="role" id="heroRole"></p>
+    <p class="tag" id="heroTag"></p>
+    <p class="big-stat" id="heroStat"></p>
+    <div class="hero-links">
+      <a class="btn" href="#works">看片</a>
+      <a class="btn btn-ghost" href="#contact">联系</a>
+    </div>
+    <p class="hint" aria-hidden="true">下滑 · 一屏一部</p>
+  </section>
+
+  <!-- 作品由 mobile.js 注入 -->
+  <div id="worksAnchor"></div>
+
+  <!-- 数据 -->
+  <section class="slide slide--stats" id="numbers">
+    <h2 class="sec-title">数据</h2>
+    <div class="stats" id="stats"></div>
+    <p class="note" id="statsNote"></p>
+  </section>
+
+  <!-- 联系 -->
+  <section class="slide slide--contact" id="contact">
+    <h2 class="contact-title">下一部戏，从一条消息开始。</h2>
+    <a class="mail" id="mailLink" href="#"></a>
+    <div class="contact-links" id="contactLinks"></div>
+    <p class="desktop-link"><a href="../?desktop=1">电脑版 ↗</a></p>
+  </section>
+
+</main>
+
+<script src="../assets/js/content.js"></script>
+<script src="mobile.js"></script>
+</body>
+</html>
