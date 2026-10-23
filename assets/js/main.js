@@ -160,53 +160,29 @@
     return "https://www.bilibili.com/video/" + extractBvid(val) + "/";
   }
 
+  /* 一屏一段：进入视口才加载并静音预览，离开就停 */
   function renderWorks() {
     var host = $("#worksList");
     if (!host || !S.projects) return;
 
     host.innerHTML = S.projects.map(function (p, i) {
-      var meta = (p.meta || []).map(function (m) {
-        return "<div><dt>" + esc(m.k) + "</dt><dd>" + esc(m.v) + "</dd></div>";
-      }).join("");
+      var v = p.video || {};
+      var poster = v.poster ? ' poster="' + esc(v.poster) + '"' : "";
 
-      var bullets = (p.bullets || []).map(function (b) { return "<li>" + b + "</li>"; }).join("");
-
-      var breakdown = (p.breakdown || []).length
-        ? '<div class="breakdown"><p>我怎么做的 / HOW I MADE IT</p><ol>' +
-          p.breakdown.map(function (b) { return "<li>" + esc(b) + "</li>"; }).join("") + "</ol></div>"
-        : "";
-
-      var tags = (p.tags || []).map(function (t) { return "<span>" + esc(t) + "</span>"; }).join("");
-
-      var biliLink = (p.video && p.video.bilibili)
-        ? '<a class="work-link" href="' + esc(biliHref(p.video.bilibili)) + '" target="_blank" rel="noopener">在 B 站观看 ↗</a>'
-        : "";
-
-      return '<article id="work-' + esc(p.id) + '" class="work' + (i % 2 ? " work--flip" : "") +
-        (p.video && p.video.orientation === "portrait" ? " work--portrait" : "") + '" data-reveal>' +
-        '<div class="work-head">' +
-          '<h3 class="work-title">' + esc(p.title) + "</h3>" +
-          '<p class="work-sub">' + (p.sub || "") + "</p>" +
-          (p.highlight ? '<p class="work-highlight"><i></i>' + esc(p.highlight) + "</p>" : "") +
+      return '<section class="reel' + (i % 2 ? " reel--flip" : "") + '" id="work-' + esc(p.id) + '" data-reveal>' +
+        '<div class="reel-media" data-video data-bilibili="' + esc(v.bilibili || "") + '" data-mp4="' + esc(v.mp4 || "") + '">' +
+          '<video muted playsinline loop preload="none"' + poster + ' data-src="' + esc(v.mp4 || "") + '"></video>' +
+          '<button class="play" type="button" aria-label="播放 ' + esc(p.title) + '，带声音"><span class="play-ring"></span></button>' +
         "</div>" +
-        '<div class="work-media">' + videoMarkup(p, i) + stillsMarkup(p) + "</div>" +
-        '<div class="work-body">' +
-          (meta ? '<dl class="meta-list">' + meta + "</dl>" : "") +
-          (bullets ? '<ul class="bullets">' + bullets + "</ul>" : "") +
-          biliLink +
-          breakdown +
+        '<div class="reel-copy">' +
+          '<p class="reel-figures">' + esc(p.figures || "") + "</p>" +
+          '<h3 class="reel-title">' + esc(p.title) + "</h3>" +
+          '<p class="reel-line">' + esc(p.line || "") + "</p>" +
+          ((p.video && p.video.bilibili)
+            ? '<a class="reel-link" href="' + esc(biliHref(p.video.bilibili)) + '" target="_blank" rel="noopener">B 站观看 ↗</a>'
+            : "") +
         "</div>" +
-        "</article>";
-    }).join("");
-  }
-
-  /* ------------------------------ work index ------------------------------ */
-  function renderWorkIndex() {
-    var host = $("#workIndex");
-    if (!host || !S.projects) return;
-    host.innerHTML = S.projects.map(function (p, i) {
-      var n = (i + 1 < 10 ? "0" : "") + (i + 1);
-      return '<a class="wchip" href="#work-' + esc(p.id) + '"><span>' + n + "</span>" + esc(p.title) + "</a>";
+        "</section>";
     }).join("");
   }
 
@@ -362,19 +338,54 @@
     return m ? m[0] : String(val).trim();
   }
 
-  function mountPlayer(media) {
+  function addSoundToggle(media, video) {
+    if (media.querySelector(".sound-toggle")) return;
+    var sound = document.createElement("button");
+    sound.type = "button";
+    sound.className = "sound-toggle";
+
+    function paint() {
+      sound.innerHTML = video.muted
+        ? '<span aria-hidden="true">🔇</span>静音'
+        : '<span aria-hidden="true">🔊</span>' + Math.round(video.volume * 100) + "%";
+      sound.setAttribute("aria-label", video.muted ? "取消静音" : "静音");
+    }
+    paint();
+
+    sound.addEventListener("click", function (e) {
+      e.stopPropagation();
+      video.muted = !video.muted;
+      if (!video.muted && video.volume === 0) video.volume = 0.2;
+      paint();
+    });
+    media.appendChild(sound);
+  }
+
+  /* 点播放：从静音预览切到带声音、带控制的完整播放 */
+  function playFull(media) {
     var bili = extractBvid(media.dataset.bilibili);
     var mp4 = media.dataset.mp4;
+    var video = media.querySelector("video");
+    var play = media.querySelector(".play");
 
-    if (!bili && !mp4) {
-      toast("还没有配置视频：在 assets/js/content.js 里填 video.bilibili 或 video.mp4");
+    if (video && mp4) {
+      if (!video.src) video.src = mp4;
+      video.muted = false;
+      video.volume = 0.2;
+      video.loop = false;
+      video.controls = true;
+      var attempt = video.play();
+      if (attempt && attempt.catch) {
+        attempt.catch(function () {
+          video.muted = true;
+          var retry = video.play();
+          if (retry && retry.catch) retry.catch(function () {});
+        });
+      }
+      if (play) play.remove();
+      addSoundToggle(media, video);
       return;
     }
-
-    // 清掉占位/封面/按钮
-    $$(".slot, .play, .play-hint, img, .media-tag", media).forEach(function (n) {
-      if (n.tagName !== "IFRAME" && n.tagName !== "VIDEO") n.remove();
-    });
 
     if (bili) {
       var iframe = document.createElement("iframe");
@@ -384,48 +395,12 @@
       iframe.setAttribute("scrolling", "no");
       iframe.setAttribute("frameborder", "0");
       iframe.setAttribute("title", "B 站视频");
+      if (play) play.remove();
       media.appendChild(iframe);
-    } else {
-      var video = document.createElement("video");
-      video.src = mp4;
-      video.controls = true;
-      video.autoplay = true;
-      video.playsInline = true;
-      video.volume = 0.2; // 默认 20% 音量：能听见，但不炸
-      if (media.dataset.poster) video.poster = media.dataset.poster;
-      media.appendChild(video);
-
-      var sound = document.createElement("button");
-      sound.type = "button";
-      sound.className = "sound-toggle";
-
-      function paintSound() {
-        sound.innerHTML = video.muted
-          ? '<span aria-hidden="true">🔇</span>静音'
-          : '<span aria-hidden="true">🔊</span>' + Math.round(video.volume * 100) + "%";
-        sound.setAttribute("aria-label", video.muted ? "取消静音" : "静音");
-      }
-      paintSound();
-
-      sound.addEventListener("click", function (e) {
-        e.stopPropagation();
-        video.muted = !video.muted;
-        if (!video.muted && video.volume === 0) video.volume = 0.2;
-        paintSound();
-      });
-      media.appendChild(sound);
-
-      // 浏览器拦截"有声自动播放"时退回静音，绝不让页面自己出声失败卡住
-      var attempt = video.play();
-      if (attempt && attempt.catch) {
-        attempt.catch(function () {
-          video.muted = true;
-          paintSound();
-          var retry = video.play();
-          if (retry && retry.catch) retry.catch(function () {});
-        });
-      }
+      return;
     }
+
+    toast("还没有配置视频：在 assets/js/content.js 里填 video.mp4 或 video.bilibili");
   }
 
   function setupVideo() {
@@ -433,8 +408,30 @@
       var play = e.target.closest(".play");
       if (!play) return;
       var media = play.closest("[data-video]");
-      if (media) mountPlayer(media);
+      if (media) playFull(media);
     });
+  }
+
+  /* 预览：进入视口才加载、静音循环；离开就暂停，不抢声音 */
+  function setupReels() {
+    var vids = $$("video[data-src]");
+    if (!vids.length) return;
+    if (reduceMotion || !("IntersectionObserver" in window)) return;
+
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        var v = en.target;
+        if (en.intersectionRatio > 0.55) {
+          if (!v.src) v.src = v.dataset.src;
+          var p = v.play();
+          if (p && p.catch) p.catch(function () {});
+        } else if (en.intersectionRatio < 0.15 && !v.paused) {
+          v.pause();
+        }
+      });
+    }, { threshold: [0, 0.15, 0.55] });
+
+    vids.forEach(function (v) { io.observe(v); });
   }
 
   /* ------------------------------ lightbox ------------------------------ */
@@ -562,13 +559,13 @@
     renderHero();
     splitName();
     renderWorks();
-    renderWorkIndex();
     renderAction();
     renderTech();
     renderPipeline();
     renderStats();
     renderContact();
     setupVideo();
+    setupReels();
     setupLightbox();
     setupNav();
     setupToTop();
