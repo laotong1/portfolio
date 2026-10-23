@@ -3,14 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>佟子易 · AI 短剧导演 / 执行导演</title>
-<meta name="description" content="佟子易，AI 短剧导演 / 执行导演，专注男频打斗题材。独立完成从剧本拆解、分镜设计到成片交付的全流程，国内与海外双版本并行输出。代表作《749 局：灵族入海》《猎魔人》《驯龙高手》。">
+<title>佟子易 · AI 短剧导演｜《749局猎神》破亿</title>
+<meta name="description" content="佟子易，AI 短剧导演 / 执行导演。导演作品《749局猎神》累计播放 1.0 亿+，在架 7 部短剧；从剧本拆解、分镜设计到成片交付全流程独立负责，国内与海外双版本并行。">
 <meta name="author" content="佟子易">
 <meta name="theme-color" content="#08090a">
 <!-- 部署后把下面两条的域名换成你的真实网址，微信/飞书里转发才会有缩略图 -->
 <meta property="og:type" content="website">
-<meta property="og:title" content="佟子易 · AI 短剧导演 / 执行导演">
-<meta property="og:description" content="男频打斗 AI 短剧，从文字到可交付成片的全流程导演。">
+<meta property="og:title" content="佟子易 · AI 短剧导演｜《749局猎神》破亿">
+<meta property="og:description" content="男频打斗 AI 短剧，从文字到可交付成片的全流程导演。单部累计播放 1.0 亿+。">
 <meta property="og:image" content="assets/img/portrait.jpg">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%2308090a'/%3E%3Crect x='6.5' y='6.5' width='51' height='51' fill='none' stroke='%23d8342a' stroke-width='2'/%3E%3Ctext x='32' y='44' font-family='sans-serif' font-size='30' font-weight='700' fill='%23ece9e2' text-anchor='middle'%3E佟%3C/text%3E%3C/svg%3E">
 <script>
@@ -61,7 +61,7 @@
         </div>
       </div>
       <figure class="hero-portrait" data-reveal>
-        <img src="assets/img/portrait.jpg" alt="佟子易 肖像" width="1730" height="2423">
+        <img src="assets/img/portrait.jpg" alt="佟子易 肖像" width="1730" height="2423" fetchpriority="high" decoding="async">
         <figcaption class="portrait-cap"><span>2026</span><span>BEIJING</span></figcaption>
       </figure>
     </div>
@@ -78,8 +78,9 @@
         <h2>代表作</h2>
         <p class="sec-en">SELECTED WORKS</p>
       </div>
-      <p class="sec-desc">不罗列片单。每部只讲三件事：我负责什么、我怎么做的、卡在哪又怎么解的。</p>
+      <p class="sec-desc">七部在架作品。前三部讲透，其余按题材归档；每部都能直接点开看 30 秒。</p>
     </div>
+    <nav class="work-index" id="workIndex" aria-label="作品索引"></nav>
     <div class="works" id="worksList"></div>
   </section>
 
@@ -177,7 +178,11 @@
   <p class="mono-label">STATIC SITE · 任何设备可直接打开</p>
 </footer>
 
-<div class="lightbox" id="lightbox" hidden>
+<button class="to-top" id="toTop" type="button" aria-label="回到顶部">
+  <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="square"/></svg>
+</button>
+
+<div class="lightbox" id="lightbox" hidden role="dialog" aria-modal="true" aria-label="作品剧照">
   <button class="lb-close" id="lbClose" aria-label="关闭">✕</button>
   <figure><img id="lbImg" alt=""><figcaption id="lbCap"></figcaption></figure>
 </div>

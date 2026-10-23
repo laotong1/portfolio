@@ -1,4 +1,4 @@
-﻿/* =========================================================
+/* =========================================================
    作品集 · 渲染与交互
    纯原生 JS，无依赖，无外部请求。
    ========================================================= */
@@ -141,7 +141,9 @@
       var img = s.image
         ? '<img src="' + esc(s.image) + '" alt="' + esc(s.label) + '" loading="lazy">'
         : slotMarkup("待插入");
-      return '<figure class="still' + (s.image ? " is-clickable" : "") + '" data-caption="' + esc(stripTags(s.caption)) + '">' +
+      return '<figure class="still' + (s.image ? " is-clickable" : "") + '"' +
+        (s.image ? ' tabindex="0" role="button"' : "") +
+        ' data-caption="' + esc(stripTags(s.caption)) + '">' +
         '<div class="still-frame">' + img + '<figcaption class="still-label">' + esc(s.label) + "</figcaption></div>" +
         '<p class="still-cap">' + (s.caption || "") + "</p>" +
         "</figure>";
@@ -180,7 +182,7 @@
         ? '<a class="work-link" href="' + esc(biliHref(p.video.bilibili)) + '" target="_blank" rel="noopener">在 B 站观看 ↗</a>'
         : "";
 
-      return '<article class="work' + (i % 2 ? " work--flip" : "") +
+      return '<article id="work-' + esc(p.id) + '" class="work' + (i % 2 ? " work--flip" : "") +
         (p.video && p.video.orientation === "portrait" ? " work--portrait" : "") + '" data-reveal>' +
         '<div class="work-head">' +
           (tags ? '<div class="tags">' + tags + "</div>" : "") +
@@ -199,7 +201,16 @@
     }).join("");
   }
 
-  /* ------------------------------ more ------------------------------ */
+  /* ------------------------------ work index ------------------------------ */
+  function renderWorkIndex() {
+    var host = $("#workIndex");
+    if (!host || !S.projects) return;
+    host.innerHTML = S.projects.map(function (p, i) {
+      var n = (i + 1 < 10 ? "0" : "") + (i + 1);
+      return '<a class="wchip" href="#work-' + esc(p.id) + '"><span>' + n + "</span>" + esc(p.title) + "</a>";
+    }).join("");
+  }
+
   /* ------------------------------ action ------------------------------ */
   function renderAction() {
     var intro = $("#actionIntro");
@@ -439,29 +450,43 @@
     var cap = $("#lbCap");
     if (!lb) return;
 
-    document.addEventListener("click", function (e) {
-      var still = e.target.closest(".still.is-clickable");
-      if (still) {
-        var pic = $("img", still);
-        if (!pic) return;
-        img.src = pic.src;
-        img.alt = pic.alt || "";
-        cap.textContent = still.dataset.caption || "";
-        lb.hidden = false;
-        document.body.style.overflow = "hidden";
-        return;
-      }
-      if (e.target === lb || e.target.id === "lbClose") close();
-    });
+    var lastFocus = null;
+
+    function open(still) {
+      var pic = $("img", still);
+      if (!pic) return;
+      lastFocus = document.activeElement;
+      img.src = pic.src;
+      img.alt = pic.alt || "";
+      cap.textContent = still.dataset.caption || "";
+      lb.hidden = false;
+      document.body.style.overflow = "hidden";
+      var closeBtn = $("#lbClose");
+      if (closeBtn) closeBtn.focus();
+    }
 
     function close() {
       lb.hidden = true;
       img.removeAttribute("src");
       document.body.style.overflow = "";
+      if (lastFocus && lastFocus.focus) lastFocus.focus();
+      lastFocus = null;
     }
 
+    document.addEventListener("click", function (e) {
+      var still = e.target.closest(".still.is-clickable");
+      if (still) { open(still); return; }
+      if (e.target === lb || e.target.id === "lbClose") close();
+    });
+
+    // 键盘：缩略图可 Tab 聚焦，回车/空格打开
     document.addEventListener("keydown", function (e) {
-      if (e.key === "Escape" && !lb.hidden) close();
+      if (e.key === "Escape" && !lb.hidden) { close(); return; }
+      if (e.key !== "Enter" && e.key !== " ") return;
+      var still = e.target.closest && e.target.closest(".still.is-clickable");
+      if (!still) return;
+      e.preventDefault();
+      open(still);
     });
   }
 
@@ -522,11 +547,28 @@
     }).join("");
   }
 
+  /* ------------------------------ back to top ------------------------------ */
+  function setupToTop() {
+    var btn = $("#toTop");
+    if (!btn) return;
+
+    var onScroll = function () {
+      btn.classList.toggle("is-on", window.scrollY > 900);
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+
+    btn.addEventListener("click", function () {
+      window.scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" });
+    });
+  }
+
   /* ------------------------------ boot ------------------------------ */
   function boot() {
     renderHero();
     splitName();
     renderWorks();
+    renderWorkIndex();
     renderAction();
     renderTech();
     renderPipeline();
@@ -535,6 +577,7 @@
     setupVideo();
     setupLightbox();
     setupNav();
+    setupToTop();
     revealObserve();
     runCounters();
     window.__PORTFOLIO_READY = true;
