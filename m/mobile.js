@@ -25,7 +25,9 @@
     if (reduce) return false;
     var c = navigator.connection || navigator.mozConnection || navigator.webkitConnection || {};
     if (c.saveData) return false;
-    if (/^(slow-)?(2g|3g)$/.test(c.effectiveType || "")) return false;
+    if (/^(slow-)?2g$/.test(c.effectiveType || "")) return false;
+    var dl = c.downlink;
+    if (typeof dl === "number" && dl > 0 && dl < 0.8) return false;
     return true;
   }
 

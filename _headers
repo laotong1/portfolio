@@ -1,0 +1,26 @@
+# JS / CSS 每次校验，改版立刻生效
+/assets/js/*
+  Cache-Control: public, max-age=0, must-revalidate
+
+/assets/css/*
+  Cache-Control: public, max-age=0, must-revalidate
+
+# 图片和视频体积大、变动少，缓存一天
+/assets/img/*
+  Cache-Control: public, max-age=86400
+  Access-Control-Allow-Origin: *
+
+/assets/video/*
+  Cache-Control: public, max-age=86400
+  Accept-Ranges: bytes
+
+/assets/pdf/*
+  Cache-Control: public, max-age=3600
+
+# 页面本身不缓存
+/
+  Cache-Control: public, max-age=0, must-revalidate
+/m/
+  Cache-Control: public, max-age=0, must-revalidate
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate
