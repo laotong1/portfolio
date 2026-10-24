@@ -27,6 +27,15 @@
     toastTimer = setTimeout(function () { t.classList.remove("is-on"); }, 3200);
   }
 
+  /* 慢网 / 省流量模式：不自动加载视频，只显示封面，等人点 */
+  function canAutoPlay() {
+    if (reduceMotion) return false;
+    var c = navigator.connection || navigator.mozConnection || navigator.webkitConnection || {};
+    if (c.saveData) return false;
+    if (/^(slow-)?(2g|3g)$/.test(c.effectiveType || "")) return false;
+    return true;
+  }
+
   /* ------------------------------ hero ------------------------------ */
   function renderHero() {
     var tag = $("#heroTagline");
@@ -383,7 +392,7 @@
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (en) {
         var v = en.target;
-        if (en.intersectionRatio > 0.5 && !reduceMotion) {
+        if (en.intersectionRatio > 0.5 && canAutoPlay()) {
           if (!v.src) v.src = v.dataset.src;
           var p = v.play();
           if (p && p.catch) p.catch(function () {});
@@ -392,7 +401,18 @@
         }
       });
     }, { threshold: [0, 0.1, 0.5] });
-    vids.forEach(function (v) { io.observe(v); });
+    vids.forEach(function (v) {
+      v.addEventListener("error", function () {
+        if (v.dataset.tries === "1") return;
+        v.dataset.tries = "1";
+        setTimeout(function () {
+          v.load();
+          var p = v.play();
+          if (p && p.catch) p.catch(function () {});
+        }, 1200);
+      });
+      io.observe(v);
+    });
   }
 
   document.addEventListener("click", function (e) {

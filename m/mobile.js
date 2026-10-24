@@ -21,6 +21,14 @@
       .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
   }
 
+  function canAutoPlay() {
+    if (reduce) return false;
+    var c = navigator.connection || navigator.mozConnection || navigator.webkitConnection || {};
+    if (c.saveData) return false;
+    if (/^(slow-)?(2g|3g)$/.test(c.effectiveType || "")) return false;
+    return true;
+  }
+
   function renderHero() {
     var name = $("#heroName"), role = $("#heroRole"), tag = $("#heroTag"), stat = $("#heroStat");
     if (name && S.name) name.textContent = S.name;
@@ -113,19 +121,28 @@
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (en) {
         var v = en.target;
-        if (en.intersectionRatio > 0.55) {
+        if (en.intersectionRatio > 0.55 && canAutoPlay()) {
           if (!v.src) v.src = v.dataset.src;
-          if (!reduce) {
-            var p = v.play();
-            if (p && p.catch) p.catch(function () {});
-          }
+          var p = v.play();
+          if (p && p.catch) p.catch(function () {});
         } else if (en.intersectionRatio < 0.15 && !v.paused) {
           v.pause();
         }
       });
     }, { threshold: [0, 0.15, 0.55] });
 
-    vids.forEach(function (v) { io.observe(v); });
+    vids.forEach(function (v) {
+      v.addEventListener("error", function () {
+        if (v.dataset.tries === "1") return;
+        v.dataset.tries = "1";
+        setTimeout(function () {
+          v.load();
+          var p = v.play();
+          if (p && p.catch) p.catch(function () {});
+        }, 1200);
+      });
+      io.observe(v);
+    });
   }
 
   /* 点视频 / 点按钮：切换声音 */
@@ -135,6 +152,20 @@
     var v = slide.querySelector("video");
     var btn = slide.querySelector(".sound");
     if (!v) return;
+
+    /* 还没加载过（慢网没自动播）：点一下才开始下载 */
+    if (!v.src) {
+      v.src = v.dataset.src;
+      v.muted = false;
+      v.volume = 0.7;
+      var pp = v.play();
+      if (pp && pp.catch) pp.catch(function () {});
+      if (btn) {
+        btn.textContent = "🔊 有声";
+        btn.setAttribute("aria-label", "关闭声音");
+      }
+      return;
+    }
 
     v.muted = !v.muted;
     if (!v.muted) {
