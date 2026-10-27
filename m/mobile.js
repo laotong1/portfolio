@@ -214,9 +214,37 @@
     nums.forEach(function (n) { io.observe(n); });
   }
 
+
+  function renderAbout() {
+    var A = S.about;
+    if (!A) return;
+    var t = $("#aboutTitle"), b = $("#aboutParas");
+    if (t) t.innerHTML = esc(A.title).replace(/\n/g, "<br>");
+    if (b) b.innerHTML = A.paras.map(function (p) { return "<p>" + esc(p) + "</p>"; }).join("");
+  }
+
+  function setupCounter() {
+    var now = $("#cntNow"), all = $("#cntAll");
+    if (!now || !all) return;
+    var slides = $$(".slide");
+    all.textContent = slides.length;
+    var onScroll = function () {
+      var i = 0, best = 1e9;
+      slides.forEach(function (s, k) {
+        var d = Math.abs(s.getBoundingClientRect().top);
+        if (d < best) { best = d; i = k; }
+      });
+      now.textContent = (i + 1 < 10 ? "0" : "") + (i + 1);
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+  }
+
   function boot() {
     renderHero();
+    renderAbout();
     renderWorks();
+    setupCounter();
     renderStats();
     renderContact();
     setupVideos();

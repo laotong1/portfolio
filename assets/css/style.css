@@ -366,3 +366,13 @@ section{max-width:none}
   .preview-media{max-height:none}
   .about-body{grid-template-columns:minmax(0,1.2fr) minmax(300px,.5fr)}
 }
+
+/* 背景粒子 */
+#particles{
+  position:fixed;inset:0;z-index:0;width:100%;height:100%;
+  pointer-events:none;display:block;opacity:.85
+}
+main,.bar,.progress{position:relative;z-index:2}
+.bar{position:fixed;z-index:50}
+.progress{position:fixed;z-index:60}
+@media (max-width:760px){ #particles{display:none} }

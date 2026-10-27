@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>佟子易 · AI 短剧导演｜作品</title>
 <meta name="description" content="佟子易，AI 短剧导演。《749局猎神》累计播放 1.0 亿+，在架 7 部短剧。">
-<meta name="theme-color" content="#08090a">
+<meta name="theme-color" content="#100e0c">
 <meta property="og:title" content="佟子易 · AI 短剧导演">
 <meta property="og:description" content="单部累计播放 1.0 亿+，在架 7 部短剧。">
 <link rel="icon" href="../assets/img/favicon.svg">
@@ -19,6 +19,7 @@
 
   <!-- 首屏 -->
   <section class="slide slide--hero" id="top">
+    <figure class="hero-photo"><img src="../assets/img/portrait.jpg" alt="佟子易" width="1730" height="2423" fetchpriority="high"></figure>
     <p class="kicker">AI SHORT DRAMA DIRECTOR</p>
     <h1 class="name" id="heroName">佟子易</h1>
     <p class="role" id="heroRole"></p>
@@ -29,6 +30,13 @@
       <a class="btn btn-ghost" href="#contact">联系</a>
     </div>
     <p class="hint" aria-hidden="true">下滑 · 一屏一部</p>
+  </section>
+
+  <!-- 关于 -->
+  <section class="slide slide--about" id="about">
+    <p class="kicker">ABOUT</p>
+    <h2 class="about-t" id="aboutTitle"></h2>
+    <div class="about-p" id="aboutParas"></div>
   </section>
 
   <!-- 作品由 mobile.js 注入 -->
@@ -50,6 +58,8 @@
   </section>
 
 </main>
+
+<div class="counter" aria-hidden="true"><b id="cntNow">01</b><span>/</span><em id="cntAll">10</em></div>
 
 <script src="../assets/js/content.js"></script>
 <script src="mobile.js"></script>

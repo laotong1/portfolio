@@ -148,3 +148,45 @@ h1,h2,p{margin:0}
 .contact-links{display:flex;flex-direction:column;gap:12px;margin-top:26px}
 .contact-links a{font-size:14px;color:var(--muted);text-decoration:underline;text-underline-offset:3px}
 .desktop-link{margin-top:40px;font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;color:var(--dim)}
+
+/* ---------- 手机端 v2 ---------- */
+:root{
+  --bg:#100e0c;
+  --fg:#f5f0e6;
+  --muted:#9a9289;
+  --dim:#736b62;
+  --red:#c8a97e;
+}
+.hero-photo{
+  position:absolute;right:0;top:0;width:38%;height:38%;
+  margin:0;overflow:hidden;opacity:.82;
+  -webkit-mask-image:linear-gradient(205deg,#000 24%,transparent 88%);
+  mask-image:linear-gradient(205deg,#000 24%,transparent 88%)
+}
+.hero-photo img{width:100%;height:100%;object-fit:cover;object-position:center 30%}
+
+.slide--hero{justify-content:flex-end}
+.kicker{font-size:10.5px}
+
+.slide--about{justify-content:center;background:var(--bg)}
+.about-t{
+  font-family:var(--serif);font-weight:700;line-height:1.28;
+  font-size:clamp(26px,7.6vw,34px);margin:14px 0 22px;letter-spacing:.01em
+}
+.about-p p{font-size:15px;line-height:1.95;color:#cfc8bc}
+.about-p p+p{margin-top:14px}
+.about-p p:first-child{color:var(--fg)}
+
+.counter{
+  position:fixed;right:14px;bottom:calc(14px + env(safe-area-inset-bottom));z-index:20;
+  font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:var(--dim);
+  pointer-events:none
+}
+.counter b{color:var(--red);font-weight:500}
+.counter span{margin:0 4px;opacity:.5}
+
+/* 作品页文字再大一点 */
+.work-title{font-size:clamp(26px,8vw,36px)}
+.work-fig{font-size:12.5px}
+.work-line{font-size:14.5px}
+.big-stat{font-size:13px}

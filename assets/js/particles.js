@@ -1,6 +1,6 @@
 /* =========================================================
-   粒子背景：缓慢漂移 + 近邻连线 + 鼠标视差
-   纯 canvas，无依赖；减少动态 / 隐藏标签页时自动停
+   背景粒子：极淡的尘埃，慢速漂移 + 轻微视差
+   与暖炭底色同调，只在空白处若隐若现
    ========================================================= */
 (function () {
   "use strict";
@@ -12,15 +12,25 @@
   var ctx = canvas.getContext("2d");
   if (!ctx) return;
 
-  var W = 0, H = 0, DPR = 1;
-  var parts = [];
-  var mouse = { x: -9999, y: -9999, tx: -9999, ty: -9999 };
-  var raf = null;
-  var running = false;
+  var W = 0, H = 0, DPR = 1, parts = [], raf = null, running = false;
+  var mouse = { x: 0, y: 0, tx: 0, ty: 0 };
 
   function count() {
-    var area = window.innerWidth * window.innerHeight;
-    return Math.max(60, Math.min(200, Math.round(area / 9000)));
+    var a = window.innerWidth * window.innerHeight;
+    return Math.max(40, Math.min(110, Math.round(a / 24000)));
+  }
+
+  function spawn() {
+    var gold = Math.random() < 0.16;
+    return {
+      x: Math.random(),
+      y: Math.random(),
+      vx: (Math.random() - 0.5) * 0.00013,
+      vy: (Math.random() - 0.5) * 0.00013 - 0.00004,
+      r: gold ? 1.5 + Math.random() * 1.1 : 0.6 + Math.random() * 0.9,
+      a: gold ? 0.6 + Math.random() * 0.3 : 0.16 + Math.random() * 0.26,
+      gold: gold
+    };
   }
 
   function resize() {
@@ -38,82 +48,74 @@
     if (parts.length > n) parts.length = n;
   }
 
-  function spawn() {
-    var red = Math.random() < 0.14;
-    return {
-      x: Math.random() * (W || window.innerWidth),
-      y: Math.random() * (H || window.innerHeight),
-      vx: (Math.random() - 0.5) * 0.22,
-      vy: (Math.random() - 0.5) * 0.22,
-      r: red ? 1.4 + Math.random() * 1.2 : 0.6 + Math.random() * 1.1,
-      a: red ? 0.55 + Math.random() * 0.35 : 0.18 + Math.random() * 0.4,
-      red: red
-    };
-  }
-
-  function step() {
+  function frame() {
     ctx.clearRect(0, 0, W, H);
 
-    mouse.x += (mouse.tx - mouse.x) * 0.05;
-    mouse.y += (mouse.ty - mouse.y) * 0.05;
+    mouse.x += (mouse.tx - mouse.x) * 0.04;
+    mouse.y += (mouse.ty - mouse.y) * 0.04;
+    var px = mouse.x / W - 0.5;
+    var py = mouse.y / H - 0.5;
 
-    var px = (mouse.x - W / 2) / W;
-    var py = (mouse.y - H / 2) / H;
-
-    var i, j, p, q, dx, dy, d2, lim = 152 * 152;
+    var i, j, p, q, dx, dy, d2, lim = 190 * 190;
+    var pts = [];
 
     for (i = 0; i < parts.length; i++) {
       p = parts[i];
       p.x += p.vx;
       p.y += p.vy;
+      if (p.x < -0.02) p.x = 1.02;
+      if (p.x > 1.02) p.x = -0.02;
+      if (p.y < -0.02) p.y = 1.02;
+      if (p.y > 1.02) p.y = -0.02;
 
-      if (p.x < -20) p.x = W + 20;
-      if (p.x > W + 20) p.x = -20;
-      if (p.y < -20) p.y = H + 20;
-      if (p.y > H + 20) p.y = -20;
+      var sx = p.x * W + px * (p.gold ? 34 : 18);
+      var sy = p.y * H + py * (p.gold ? 34 : 18);
+      pts.push({ x: sx, y: sy, r: p.r, a: p.a, gold: p.gold });
+    }
 
-      var ox = px * (p.red ? 26 : 14);
-      var oy = py * (p.red ? 26 : 14);
-
-      // 近邻连线
-      for (j = i + 1; j < parts.length; j++) {
-        q = parts[j];
-        dx = (p.x + ox) - (q.x + px * (q.red ? 26 : 14));
-        dy = (p.y + oy) - (q.y + py * (q.red ? 26 : 14));
+    for (i = 0; i < pts.length; i++) {
+      p = pts[i];
+      for (j = i + 1; j < pts.length; j++) {
+        q = pts[j];
+        dx = p.x - q.x;
+        dy = p.y - q.y;
         d2 = dx * dx + dy * dy;
         if (d2 < lim) {
           var t = 1 - d2 / lim;
-          ctx.strokeStyle = "rgba(216,52,42," + (t * 0.16).toFixed(3) + ")";
-          ctx.lineWidth = 0.6;
+          ctx.strokeStyle = "rgba(245,240,230," + (t * 0.07).toFixed(3) + ")";
+          ctx.lineWidth = 0.5;
           ctx.beginPath();
-          ctx.moveTo(p.x + ox, p.y + oy);
-          ctx.lineTo(q.x + px * (q.red ? 26 : 14), q.y + py * (q.red ? 26 : 14));
+          ctx.moveTo(p.x, p.y);
+          ctx.lineTo(q.x, q.y);
           ctx.stroke();
         }
       }
+    }
 
+    for (i = 0; i < pts.length; i++) {
+      p = pts[i];
       ctx.beginPath();
-      ctx.arc(p.x + ox, p.y + oy, p.r, 0, Math.PI * 2);
-      if (p.red) {
-        ctx.fillStyle = "rgba(232,65,47," + p.a + ")";
-        ctx.shadowColor = "rgba(216,52,42,.85)";
-        ctx.shadowBlur = 14;
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      if (p.gold) {
+        ctx.fillStyle = "rgba(200,169,126," + p.a + ")";
+        ctx.shadowColor = "rgba(200,169,126,.75)";
+        ctx.shadowBlur = 10;
       } else {
-        ctx.fillStyle = "rgba(236,233,226," + p.a + ")";
+        ctx.fillStyle = "rgba(245,240,230," + p.a + ")";
         ctx.shadowBlur = 0;
       }
       ctx.fill();
       ctx.shadowBlur = 0;
     }
 
-    raf = requestAnimationFrame(step);
+    raf = requestAnimationFrame(frame);
   }
 
   function start() {
     if (running) return;
     running = true;
     resize();
-    step();
+    frame();
   }
 
   function stop() {
@@ -122,21 +124,15 @@
     raf = null;
   }
 
-  window.addEventListener("resize", function () {
-    if (!running) return;
-    resize();
-  }, { passive: true });
-
+  window.addEventListener("resize", function () { if (running) resize(); }, { passive: true });
   window.addEventListener("mousemove", function (e) {
     mouse.tx = e.clientX;
     mouse.ty = e.clientY;
   }, { passive: true });
-
   document.addEventListener("visibilitychange", function () {
     if (document.hidden) stop();
-    else if (!document.hidden) start();
+    else start();
   });
 
-  if (window.__SITE_READY) start();
-  else document.addEventListener("site:ready", start, { once: true });
+  start();
 })();
