@@ -68,8 +68,6 @@
 
     return '<section class="panel panel--work' + (i % 2 ? " is-flip" : "") + '" id="work-' + esc(p.id) +
       '" data-panel data-label="作品 ' + no + '">' +
-      '<div class="work-bg" aria-hidden="true" style="background-image:url(' + esc(v.poster || "") + ')"></div>' +
-      '<span class="ghost" aria-hidden="true">' + no + "</span>" +
       '<div class="work-grid">' +
         '<div class="work-media" data-video data-bilibili="' + esc(v.bilibili || "") + '" data-mp4="' + esc(v.mp4 || "") + '">' +
           '<video muted playsinline loop preload="none"' + poster + ' data-src="' + esc(v.mp4 || "") + '"></video>' +

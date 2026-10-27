@@ -3,11 +3,11 @@
    ========================================================= */
 
 :root{
-  --bg:#08090a;
+  --bg:#0a0a0b;
   --fg:#ece9e2;
   --muted:#9aa0a8;
   --dim:#7a7f88;
-  --red:#d8342a;
+  --red:#c2a878;
   --line:rgba(236,233,226,.14);
   --font:"PingFang SC","Hiragino Sans GB","Microsoft YaHei UI","Microsoft YaHei","Noto Sans SC",system-ui,sans-serif;
   --mono:"SF Mono",ui-monospace,"Cascadia Mono",Consolas,monospace;
