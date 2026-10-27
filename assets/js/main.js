@@ -108,6 +108,78 @@
 
   var previewIndex = 0;
 
+
+  /* ---------------- about ---------------- */
+  function renderAbout() {
+    var A = S.about;
+    if (!A) return;
+    var k = $("#aboutKicker"), t = $("#aboutTitle"), body = $("#aboutText"), facts = $("#aboutFacts");
+    if (k && A.kicker) k.textContent = A.kicker;
+    if (t && A.title) t.innerHTML = esc(A.title).replace(/\n/g, "<br>");
+    if (body && A.paras) body.innerHTML = A.paras.map(function (p) { return "<p>" + esc(p) + "</p>"; }).join("");
+    if (facts && A.facts) facts.innerHTML = A.facts.map(function (f) {
+      return "<div><dt>" + esc(f.k) + "</dt><dd>" + esc(f.v) + "</dd></div>";
+    }).join("");
+  }
+
+  /* ---------------- stills ---------------- */
+  function renderStills() {
+    var host = $("#stillsGrid");
+    if (!host || !S.projects) return;
+    var cells = [];
+    S.projects.forEach(function (p) {
+      var list = (p.stills && p.stills.length) ? p.stills : null;
+      if (!list) {
+        list = [1, 2, 3, 4, 5, 6].map(function (n) {
+          return {
+            label: "画面 " + (n < 10 ? "0" : "") + n,
+            caption: p.title.replace(/[《》]/g, ""),
+            image: "assets/img/f-" + p.id + "-" + n + ".jpg"
+          };
+        });
+      }
+      list.forEach(function (st) {
+        cells.push('<figure class="still" tabindex="0" role="button" ' +
+          'data-full="' + esc(st.image) + '" data-cap="' + esc(p.title + " · " + st.label) + '">' +
+          '<img src="' + esc(st.image) + '" alt="' + esc(p.title + " " + st.label) + '" loading="lazy" decoding="async">' +
+          '<figcaption><b>' + esc(st.label) + "</b><span>" + esc(st.caption) + "</span></figcaption>" +
+          "</figure>");
+      });
+    });
+    host.innerHTML = cells.join("");
+  }
+
+  function setupLightbox() {
+    var lb = $("#lightbox"), img = $("#lbImg"), cap = $("#lbCap");
+    if (!lb) return;
+    var last = null;
+    function open(el) {
+      last = document.activeElement;
+      img.src = el.dataset.full;
+      img.alt = el.dataset.cap || "";
+      cap.textContent = el.dataset.cap || "";
+      lb.hidden = false;
+      var c = $("#lbClose");
+      if (c) c.focus();
+    }
+    function close() {
+      lb.hidden = true;
+      img.removeAttribute("src");
+      if (last && last.focus) last.focus();
+    }
+    document.addEventListener("click", function (e) {
+      var f = e.target.closest(".still");
+      if (f) { open(f); return; }
+      if (e.target === lb || (e.target.id === "lbClose")) close();
+    });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && !lb.hidden) close();
+      if (e.key !== "Enter" && e.key !== " ") return;
+      var f = e.target.closest && e.target.closest(".still");
+      if (f) { e.preventDefault(); open(f); }
+    });
+  }
+
   /* ---------------- action ---------------- */
   function renderAction() {
     var host = $("#actionSteps");
@@ -298,12 +370,15 @@
 
   function boot() {
     renderHero();
+    renderAbout();
     renderWorks();
+    renderStills();
     renderAction();
     renderTech();
     renderStats();
     renderContact();
     setupPreviewAudio();
+    setupLightbox();
     setupProgress();
     setupReveal();
     setupCounters();
