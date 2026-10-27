@@ -1,6 +1,5 @@
 /* =========================================================
-   作品集 · 横屏舞台
-   横向推进（滚轮/方向键/圆点），作品、动作戏、技术、数据、联系
+   佟子易 · 作品集（纵向版）
    ========================================================= */
 (function () {
   "use strict";
@@ -10,11 +9,18 @@
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  var STAMPS = ["00:03", "00:08", "00:13", "00:18", "00:23", "00:27"];
-
   function esc(v) {
     return String(v == null ? "" : v)
       .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+
+  function canAutoPlay() {
+    if (reduceMotion) return false;
+    var c = navigator.connection || navigator.mozConnection || {};
+    if (c.saveData) return false;
+    if (/^(slow-)?2g$/.test(c.effectiveType || "")) return false;
+    if (typeof c.downlink === "number" && c.downlink > 0 && c.downlink < 0.8) return false;
+    return true;
   }
 
   var toastTimer;
@@ -24,75 +30,85 @@
     t.textContent = msg;
     t.classList.add("is-on");
     clearTimeout(toastTimer);
-    toastTimer = setTimeout(function () { t.classList.remove("is-on"); }, 3200);
+    toastTimer = setTimeout(function () { t.classList.remove("is-on"); }, 3000);
   }
 
-  /* 慢网 / 省流量模式：不自动加载视频，只显示封面，等人点 */
-  function canAutoPlay() {
-    if (reduceMotion) return false;
-    var c = navigator.connection || navigator.mozConnection || navigator.webkitConnection || {};
-    if (c.saveData) return false;
-    if (/^(slow-)?2g$/.test(c.effectiveType || "")) return false;
-    var dl = c.downlink;
-    if (typeof dl === "number" && dl > 0 && dl < 0.8) return false;
-    return true;
-  }
-
-  /* ------------------------------ hero ------------------------------ */
+  /* ---------------- hero ---------------- */
   function renderHero() {
-    var tag = $("#heroTagline");
+    var role = $("#heroRole"), tag = $("#heroTagline"), meta = $("#heroMeta"), btn = $("#resumeBtn");
+    if (role) role.textContent = S.role || "";
     if (tag) tag.innerHTML = S.tagline || "";
-    var role = $("#heroRole");
-    if (role && S.role) role.textContent = S.role;
-    var meta = $("#heroMeta");
     if (meta && S.meta) meta.innerHTML = S.meta.map(function (m) { return "<span>" + esc(m) + "</span>"; }).join("");
-    var btn = $("#resumeBtn");
     if (btn && S.resume) { btn.href = S.resume.director; btn.setAttribute("download", ""); }
-    var name = $("#heroName");
-    if (name && S.name) name.textContent = S.name;
   }
 
-  /* ------------------------------ works ------------------------------ */
-  function workPanel(p, i) {
+  /* ---------------- works ---------------- */
+  var previewVideo = null;
+
+  function previewHTML(p) {
     var v = p.video || {};
-    var poster = v.poster ? ' poster="' + esc(v.poster) + '"' : "";
-    var no = (i + 1 < 10 ? "0" : "") + (i + 1);
+    return '<video muted playsinline webkit-playsinline loop preload="metadata" ' +
+      'poster="' + esc(v.poster || "") + '" src="' + esc(v.mp4 || "") + '"></video>' +
+      '<button class="preview-play" type="button">▶ 播放 · 有声</button>';
+  }
 
-    var strip = STAMPS.map(function (tc, n) {
-      var src = "assets/img/f-" + p.id + "-" + (n + 1) + ".jpg";
-      return '<figure class="work-frame" tabindex="0" role="button" data-full="' + esc(src) + '" data-cap="' + esc(p.title) + " · " + tc + '">' +
-        '<img src="' + esc(src) + '" alt="' + esc(p.title) + " 第 " + (n + 1) + ' 帧" loading="lazy" decoding="async">' +
-        '<figcaption class="work-tc">' + tc + "</figcaption>" +
-        "</figure>";
-    }).join("");
+  function showWork(i, autoplay) {
+    var host = $("#previewMedia");
+    if (!host || !S.projects) return;
+    var p = S.projects[i];
+    if (!p) return;
 
-    return '<section class="panel panel--work' + (i % 2 ? " is-flip" : "") + '" id="work-' + esc(p.id) +
-      '" data-panel data-label="作品 ' + no + '">' +
-      '<div class="work-grid">' +
-        '<div class="work-media" data-video data-bilibili="' + esc(v.bilibili || "") + '" data-mp4="' + esc(v.mp4 || "") + '">' +
-          '<video muted playsinline loop preload="none"' + poster + ' data-src="' + esc(v.mp4 || "") + '"></video>' +
-          '<button class="play" type="button" aria-label="播放 ' + esc(p.title) + '，带声音"><span class="play-ring"></span></button>' +
-        "</div>" +
-        '<div class="work-copy">' +
-          '<p class="work-no">' + no + "</p>" +
-          '<h3 class="work-title">' + esc(p.title) + "</h3>" +
-          '<p class="work-fig">' + esc(p.figures || "") + "</p>" +
-          '<p class="work-line">' + esc(p.line || "") + "</p>" +
-          '<div class="work-strip">' + strip + "</div>" +
-        "</div>" +
-      "</div>" +
-      "</section>";
+    $$(".row").forEach(function (r) { r.classList.toggle("is-on", Number(r.dataset.i) === i); });
+
+    var v = p.video || {};
+    if (v.mp4) {
+      host.innerHTML = '<video muted playsinline webkit-playsinline loop preload="metadata" ' +
+        'poster="' + esc(v.poster || "") + '" src="' + esc(v.mp4) + '"></video>' +
+        '<button class="preview-play" type="button">▶ 播放 · 有声</button>';
+      previewVideo = host.querySelector("video");
+      if (autoplay && previewVideo && canAutoPlay()) {
+        var pr = previewVideo.play();
+        if (pr && pr.catch) pr.catch(function () {});
+      }
+    } else {
+      host.innerHTML = '<div class="ph">视频整理中</div>';
+      previewVideo = null;
+    }
   }
 
   function renderWorks() {
-    var track = $("#track");
-    var anchor = $("#action");
-    if (!track || !S.projects || !anchor) return;
-    var html = S.projects.map(workPanel).join("");
-    anchor.insertAdjacentHTML("beforebegin", html);
+    var host = $("#worksIndex");
+    if (!host || !S.projects) return;
+    host.innerHTML = S.projects.map(function (p, i) {
+      var no = (i + 1 < 10 ? "0" : "") + (i + 1);
+      /* 右侧只放数字，避免和副标题重复 */
+      var play = "";
+      var mm = /([0-9][0-9.,]*\s*(?:亿|万)[^·]*)/.exec(p.figures || "");
+      if (mm) play = mm[1].replace("播放", "").trim();
+      var meta = (p.figures || "").split("·").map(function (x) { return x.trim(); })
+        .filter(function (x) { return x && !/[0-9][0-9.,]*\s*(?:亿|万)/.test(x); }).join(" · ");
+
+      return '<li class="row" data-i="' + i + '" tabindex="0">' +
+        '<span class="no">' + no + "</span>" +
+        '<div><span class="t">' + esc(p.title) + '</span>' +
+          '<span class="m">' + esc(meta) + "</span></div>" +
+        '<span class="p">' + esc(play) + "</span>" +
+        "</li>";
+    }).join("");
+
+    $$(".row").forEach(function (row) {
+      var i = Number(row.dataset.i) || 0;
+      row.addEventListener("mouseenter", function () { if (previewIndex !== i) { previewIndex = i; showWork(i, true); } });
+      row.addEventListener("focus", function () { if (previewIndex !== i) { previewIndex = i; showWork(i, true); } });
+      row.addEventListener("click", function () { previewIndex = i; showWork(i, true); });
+    });
+
+    showWork(0, false);
   }
 
-  /* ------------------------------ action ------------------------------ */
+  var previewIndex = 0;
+
+  /* ---------------- action ---------------- */
   function renderAction() {
     var host = $("#actionSteps");
     if (host && S.action) {
@@ -109,7 +125,7 @@
     if (intro && S.action) intro.textContent = S.action.intro || "";
   }
 
-  /* ------------------------------ tech ------------------------------ */
+  /* ---------------- tech ---------------- */
   function renderTech() {
     var P = S.pipeline, host = $("#pipeNodes");
     if (host && P) {
@@ -117,86 +133,59 @@
         return '<li class="pipe-node"><span class="pn-dot"></span><b>' + esc(s.k) + "</b><em>" + esc(s.s) + "</em></li>";
       }).join("");
     }
-
-    var row = $("#techRow");
-    if (row && S.tech) {
-      row.innerHTML = S.tech.map(function (t) {
+    var grid = $("#techRow");
+    if (grid && S.tech) {
+      grid.innerHTML = S.tech.map(function (t) {
+        var pts = (t.points || []).map(function (p) { return "<li>" + esc(p) + "</li>"; }).join("");
         return '<article class="tech-card">' +
           '<p class="mono-label">' + esc(t.label) + "</p>" +
           "<h3>" + esc(t.title) + "</h3>" +
-          "<ul>" + (t.points || []).map(function (pt) { return "<li>" + esc(pt) + "</li>"; }).join("") + "</ul>" +
+          "<ul>" + pts + "</ul>" +
           "</article>";
       }).join("");
     }
   }
 
-  /* ------------------------------ stats ------------------------------ */
+  /* ---------------- numbers ---------------- */
   function renderStats() {
     var host = $("#stats");
-    if (!host || !S.stats) return;
-    host.innerHTML = S.stats.map(function (s, i) {
-      return '<div class="stat">' +
-        '<p class="stat-v">' +
-          (s.prefix ? '<span class="stat-a">' + esc(s.prefix) + "</span>" : "") +
-          '<span class="stat-n" data-target="' + s.n + '" data-decimals="' + (s.decimals || 0) + '" data-index="' + i + '">0</span>' +
-          (s.suffix ? '<span class="stat-a">' + esc(s.suffix) + "</span>" : "") +
-        "</p>" +
-        '<p class="stat-l">' + esc(s.label) + "</p>" +
-        '<p class="stat-s">' + esc(s.sub || "") + "</p>" +
-        "</div>";
-    }).join("");
+    if (host && S.stats) {
+      host.innerHTML = S.stats.map(function (s) {
+        return '<div class="stat">' +
+          '<p class="stat-v">' +
+            (s.prefix ? '<span class="stat-a">' + esc(s.prefix) + "</span>" : "") +
+            '<span class="stat-n" data-n="' + s.n + '" data-dec="' + (s.decimals || 0) + '">0</span>' +
+            (s.suffix ? '<span class="stat-a">' + esc(s.suffix) + "</span>" : "") +
+          "</p>" +
+          '<p class="stat-l">' + esc(s.label) + "</p>" +
+          '<p class="stat-s">' + esc(s.sub || "") + "</p>" +
+          "</div>";
+      }).join("");
+    }
     var note = $("#statsNote");
     if (note && S.statsNote) note.textContent = S.statsNote;
   }
 
-  function animateNumber(node) {
-    var target = parseFloat(node.dataset.target) || 0;
-    var dec = parseInt(node.dataset.decimals || "0", 10);
-    var start = null, dur = 1400;
-    var token = String(Date.now()) + Math.random();
-    node.dataset.token = token;
-    if (reduceMotion) {
-      node.textContent = dec ? target.toFixed(dec) : target.toLocaleString("en-US");
-      return;
-    }
+  function countUp(el) {
+    var target = parseFloat(el.dataset.n) || 0;
+    var dec = parseInt(el.dataset.dec || "0", 10);
+    var t0 = 0;
+    function fmt(v) { return dec ? v.toFixed(dec) : Math.round(v).toLocaleString("en-US"); }
     function frame(ts) {
-      if (node.dataset.token !== token) return;
-      if (!start) start = ts;
-      var p = Math.min((ts - start) / dur, 1);
+      if (!t0) t0 = ts;
+      var p = Math.min((ts - t0) / 1300, 1);
       var e = 1 - Math.pow(1 - p, 3);
-      var v = target * e;
-      node.textContent = dec ? v.toFixed(dec) : Math.round(v).toLocaleString("en-US");
+      el.textContent = fmt(target * e);
       if (p < 1) requestAnimationFrame(frame);
-      else node.textContent = dec ? target.toFixed(dec) : target.toLocaleString("en-US");
+      else el.textContent = fmt(target);
     }
     requestAnimationFrame(frame);
   }
 
-  function setupCounters() {
-    var nums = $$(".stat-n");
-    if (!nums.length) return;
-    if (!("IntersectionObserver" in window) || reduceMotion) {
-      nums.forEach(function (n) {
-        var v = parseFloat(n.dataset.target) || 0;
-        var d = parseInt(n.dataset.decimals || "0", 10);
-        n.textContent = d ? v.toFixed(d) : v.toLocaleString("en-US");
-      });
-      return;
-    }
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (en) {
-        if (en.isIntersecting) animateNumber(en.target);
-        else { en.target.dataset.token = ""; en.target.textContent = "0"; }
-      });
-    }, { threshold: 0.6 });
-    nums.forEach(function (n) { io.observe(n); });
-  }
-
-  /* ------------------------------ contact ------------------------------ */
+  /* ---------------- contact ---------------- */
   function renderContact() {
     var mail = $("#mailLink");
     if (mail && S.email) { mail.href = "mailto:" + S.email; mail.textContent = S.email; }
-
     var host = $("#contactLinks");
     if (!host) return;
     var items = (S.contact || []).filter(function (c) { return c.label !== "邮箱"; });
@@ -210,262 +199,103 @@
     }).join("");
   }
 
-  /* ------------------------------ stage ------------------------------ */
-  var nextFrame = window.requestAnimationFrame;
-  var panels = [], vw = 0, cur = 0, goal = 0, vel = 0;
-  var wheelAcc = 0, wheelFlipped = false, lastWheel = 0, locked = false;
-  var pipeEl = null, pipeNodes = [];
-
-  function isStage() { return window.matchMedia("(min-width: 981px)").matches; }
-
-  function measure() {
-    vw = window.innerWidth || 1;
-    goal = Math.max(0, Math.min(panels.length - 1, goal));
-    if (!isStage()) { cur = 0; vel = 0; }
-  }
-
-  function apply() {
-    var track = $("#track");
-    if (track) track.style.transform = "translate3d(" + (-cur * vw).toFixed(2) + "px,0,0)";
-  }
-
-  function currentIndex() {
-    if (isStage()) return Math.max(0, Math.min(panels.length - 1, Math.round(cur)));
-    var best = 0, bd = Infinity;
-    panels.forEach(function (p, i) {
-      var r = p.getBoundingClientRect();
-      var d = Math.abs(r.top);
-      if (d < bd) { bd = d; best = i; }
-    });
-    return best;
-  }
-
-  /* 产线进度：横屏时按横向位置，竖屏时按视口位置 */
-  function techProgress() {
-    var t = document.getElementById("tech");
-    if (!t) return -1;
-    var r = t.getBoundingClientRect();
-    if (isStage()) {
-      var c = r.left + r.width / 2;
-      return Math.max(0, Math.min(1, 1 - Math.abs(c - window.innerWidth / 2) / (window.innerWidth * 0.9)));
-    }
-    var vh = window.innerHeight;
-    return Math.max(0, Math.min(1, (vh * 0.62 - r.top) / (r.height + vh * 0.15)));
-  }
-
-  function paintPipe() {
-    if (!pipeEl) return;
-    var p = techProgress();
-    if (p < 0) return;
-    pipeEl.style.setProperty("--p", p.toFixed(3));
-    for (var i = 0; i < pipeNodes.length; i++) {
-      pipeNodes[i].classList.toggle("is-on", p >= i / (pipeNodes.length - 1) - 0.03);
-    }
-  }
-
-  function hud() {
-    var idx = currentIndex() + 1;
-    idx = Math.max(1, Math.min(panels.length, idx));
-    var now = $("#panelNow"), total = $("#panelTotal"), label = $("#panelLabel"), fill = $("#hudFill");
-    if (now) now.textContent = (idx < 10 ? "0" : "") + idx;
-    if (total) total.textContent = panels.length;
-    if (label) label.textContent = panels[idx - 1].dataset.label || "";
-    if (fill) fill.style.transform = "scaleX(" + (panels.length > 1 ? cur / (panels.length - 1) : 0).toFixed(4) + ")";
-
-    $$(".dots button").forEach(function (b, i) { b.classList.toggle("is-on", i === idx - 1); });
-
-    var currentId = panels[idx - 1].id;
-    $$(".hud-nav a").forEach(function (a) {
-      var j = a.dataset.jump;
-      var on = currentId === j || (j === "works" && currentId.indexOf("work-") === 0);
-      a.classList.toggle("is-active", on);
+  /* ---------------- interactions ---------------- */
+  function setupPreviewAudio() {
+    document.addEventListener("click", function (e) {
+      var btn = e.target.closest(".preview-play");
+      if (!btn) return;
+      var v = btn.parentElement.querySelector("video");
+      if (!v) return;
+      if (!v.src && v.dataset.src) v.src = v.dataset.src;
+      if (v.muted) { v.muted = false; v.volume = 0.2; btn.textContent = "🔊 有声"; }
+      else { v.muted = true; btn.textContent = "▶ 播放 · 有声"; }
+      var p = v.play();
+      if (p && p.catch) p.catch(function () {});
     });
   }
 
-  function goTo(i) {
-    goal = Math.max(0, Math.min(panels.length - 1, i));
-    if (reduceMotion) { cur = goal; vel = 0; }
+  function setupProgress() {
+    var fill = $("#progressFill");
+    if (!fill) return;
+    var onScroll = function () {
+      var h = document.documentElement.scrollHeight - window.innerHeight;
+      fill.style.width = (h > 0 ? (window.scrollY / h) * 100 : 0).toFixed(2) + "%";
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
   }
 
-  /* 物理弹簧：ω=20, ζ=0.62 → 约 5% 过冲，550ms 落定 */
-  var lastT = 0;
-  function loop(t) {
-    var dt = lastT ? Math.min((t - lastT) / 1000, 1 / 30) : 1 / 60;
-    lastT = t;
-    if (isStage()) {
-      var ST = 400, DP = 24.8;
-      var a = -ST * (cur - goal) - DP * vel;
-      vel += a * dt;
-      cur += vel * dt;
-      if (Math.abs(goal - cur) < 0.0008 && Math.abs(vel) < 0.0008) { cur = goal; vel = 0; }
-    }
-    apply();
-    hud();
-    paintPipe();
-    nextFrame(loop);
-  }
-
-  function setupStage() {
-    panels = $$(".panel");
-    measure();
-
-    var dotsHost = $("#dots");
-    if (dotsHost) {
-      dotsHost.innerHTML = panels.map(function (p, i) {
-        return '<button type="button" aria-label="' + esc(p.dataset.label || ("第 " + (i + 1) + " 屏")) + '"></button>';
-      }).join("");
-      $$("button", dotsHost).forEach(function (b, i) {
-        b.addEventListener("click", function () { goTo(i); });
-      });
-    }
-
-    if (isStage() && !locked) {
-      locked = true;
-      document.body.classList.add("is-stage");
-
-      window.addEventListener("wheel", function (e) {
-        if (!isStage()) return;
-        e.preventDefault();
-
-        var now = performance.now();
-        // 一次手势只翻一屏：停顿超过 120ms 才算新手势
-        if (now - lastWheel > 120) { wheelAcc = 0; wheelFlipped = false; }
-        lastWheel = now;
-
-        if (wheelFlipped) return;
-        wheelAcc += e.deltaY + e.deltaX;
-
-        if (Math.abs(wheelAcc) >= 56) {
-          goTo(goal + (wheelAcc > 0 ? 1 : -1));
-          wheelAcc = 0;
-          wheelFlipped = true;
-        }
-      }, { passive: false });
-
-      window.addEventListener("keydown", function (e) {
-        if (!isStage()) return;
-        if (e.key === "ArrowRight" || e.key === "PageDown" || e.key === " ") { e.preventDefault(); goTo(goal + 1); }
-        if (e.key === "ArrowLeft" || e.key === "PageUp") { e.preventDefault(); goTo(goal - 1); }
-        if (e.key === "Home") { e.preventDefault(); goTo(0); }
-        if (e.key === "End") { e.preventDefault(); goTo(panels.length - 1); }
-      });
-    }
-
-    $$("[data-jump]").forEach(function (a) {
-      a.addEventListener("click", function (e) {
-        e.preventDefault();
-        var key = a.dataset.jump;
-        var idx = panels.findIndex(function (p) {
-          return p.id === key || (key === "works" && p.id.indexOf("work-") === 0);
-        });
-        if (idx < 0) return;
-        if (isStage()) goTo(idx);
-        else panels[idx].scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
-      });
-    });
-
-    window.addEventListener("resize", function () {
-      measure();
-      if (!isStage()) { cur = 0; goal = 0; vel = 0; apply(); }
-    });
-  }
-
-  /* ------------------------------ reveal ------------------------------ */
   function setupReveal() {
-    var items = $$(".panel");
+    var blocks = $$(".sec-head, .index, .preview, .steps, .lead, .pipe, .tech-grid, .stats, .note, .contact-title, .mail, .links");
+    blocks.forEach(function (b) { b.classList.add("reveal"); });
     if (!("IntersectionObserver" in window)) {
-      items.forEach(function (n) { n.classList.add("is-in"); });
+      blocks.forEach(function (b) { b.classList.add("is-in"); });
       return;
     }
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (en) {
-        if (en.isIntersecting) en.target.classList.add("is-in");
+        if (en.isIntersecting) { en.target.classList.add("is-in"); io.unobserve(en.target); }
       });
-    }, { threshold: 0.12 });
-    items.forEach(function (n) { io.observe(n); });
+    }, { rootMargin: "0px 0px -8% 0px", threshold: 0.05 });
+    blocks.forEach(function (b) { io.observe(b); });
   }
 
-  /* ------------------------------ video ------------------------------ */
-  function setupVideo() {
-    var vids = $$("video[data-src]");
-    if (!vids.length) return;
+  function setupCounters() {
+    var nums = $$(".stat-n");
+    if (!nums.length) return;
+    if (!("IntersectionObserver" in window) || reduceMotion) {
+      nums.forEach(function (n) {
+        var v = parseFloat(n.dataset.n) || 0;
+        var d = parseInt(n.dataset.dec || "0", 10);
+        n.textContent = d ? v.toFixed(d) : v.toLocaleString("en-US");
+      });
+      return;
+    }
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (en) {
-        var v = en.target;
-        if (en.intersectionRatio > 0.5 && canAutoPlay()) {
-          if (!v.src) v.src = v.dataset.src;
-          var p = v.play();
-          if (p && p.catch) p.catch(function () {});
-        } else if (en.intersectionRatio < 0.1 && !v.paused) {
-          v.pause();
-        }
+        if (!en.isIntersecting) return;
+        countUp(en.target);
+        io.unobserve(en.target);
       });
-    }, { threshold: [0, 0.1, 0.5] });
-    vids.forEach(function (v) {
-      v.addEventListener("error", function () {
-        if (v.dataset.tries === "1") return;
-        v.dataset.tries = "1";
-        setTimeout(function () {
-          v.load();
-          var p = v.play();
-          if (p && p.catch) p.catch(function () {});
-        }, 1200);
-      });
-      io.observe(v);
-    });
+    }, { threshold: 0.4 });
+    nums.forEach(function (n) { io.observe(n); });
   }
 
-  document.addEventListener("click", function (e) {
-    var play = e.target.closest(".play");
-    if (!play) return;
-    var media = play.closest("[data-video]");
-    if (!media) return;
-    var v = media.querySelector("video");
-    if (!v) return;
-    if (!v.src) v.src = media.dataset.mp4;
-    v.muted = false;
-    v.volume = 0.2;
-    v.loop = false;
-    v.controls = true;
-    var p = v.play();
-    if (p && p.catch) p.catch(function () { v.muted = true; });
-    play.remove();
-  });
-
-  /* ------------------------------ lightbox ------------------------------ */
-  function setupLightbox() {
-    var lb = $("#lightbox"), img = $("#lbImg"), cap = $("#lbCap");
-    if (!lb) return;
-    var lastFocus = null;
-
-    function open(el) {
-      lastFocus = document.activeElement;
-      img.src = el.dataset.full;
-      img.alt = el.dataset.cap || "";
-      cap.textContent = el.dataset.cap || "";
-      lb.hidden = false;
-      $("#lbClose").focus();
-    }
-    function close() {
-      lb.hidden = true;
-      img.removeAttribute("src");
-      if (lastFocus && lastFocus.focus) lastFocus.focus();
-    }
-
-    document.addEventListener("click", function (e) {
-      var f = e.target.closest(".work-frame");
-      if (f) { open(f); return; }
-      if (e.target === lb || e.target.id === "lbClose") close();
-    });
-    document.addEventListener("keydown", function (e) {
-      if (e.key === "Escape" && !lb.hidden) close();
-      if (e.key !== "Enter" && e.key !== " ") return;
-      var f = e.target.closest && e.target.closest(".work-frame");
-      if (f) { e.preventDefault(); open(f); }
-    });
+  function setupNav() {
+    var links = $$(".nav a");
+    if (!links.length || !("IntersectionObserver" in window)) return;
+    var map = {};
+    links.forEach(function (a) { map[a.getAttribute("href").slice(1)] = a; });
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        links.forEach(function (a) { a.classList.remove("is-active"); });
+        var a = map[en.target.id];
+        if (a) a.classList.add("is-active");
+      });
+    }, { rootMargin: "-45% 0px -50% 0px" });
+    $$("section[id]").forEach(function (s) { io.observe(s); });
   }
 
-  /* ------------------------------ boot ------------------------------ */
+  /* 技术产线进度：按滚动位置点亮 */
+  function setupPipe() {
+    var pipe = $("#pipe");
+    var nodes = $$(".pipe-node");
+    if (!pipe || !nodes.length) return;
+    var onScroll = function () {
+      var r = pipe.getBoundingClientRect();
+      var vh = window.innerHeight;
+      var p = Math.max(0, Math.min(1, (vh * 0.75 - r.top) / (r.height + vh * 0.25)));
+      pipe.style.setProperty("--p", p.toFixed(3));
+      nodes.forEach(function (n, i) {
+        n.classList.toggle("is-on", p >= i / (nodes.length - 1) - 0.02);
+      });
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+  }
+
   function boot() {
     renderHero();
     renderWorks();
@@ -473,16 +303,12 @@
     renderTech();
     renderStats();
     renderContact();
-
-    setupStage();
+    setupPreviewAudio();
+    setupProgress();
     setupReveal();
-    setupVideo();
-    setupLightbox();
     setupCounters();
-    pipeEl = document.getElementById("pipe");
-    pipeNodes = $$(".pipe-node");
-    nextFrame(loop);
-
+    setupNav();
+    setupPipe();
     window.__SITE_READY = true;
     document.dispatchEvent(new CustomEvent("site:ready"));
   }
